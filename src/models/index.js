@@ -335,9 +335,26 @@ const payoutSchema = new mongoose.Schema({
 
 const Payout = mongoose.model('Payout', payoutSchema);
 
+// ─── Import New Models ────────────────────────────────────────────────────────
+const Achievement = require('./Achievement.model');
+const UserAchievement = require('./UserAchievement.model');
+const Leaderboard = require('./Leaderboard.model');
+const DiscussionForum = require('./DiscussionForum.model');
+const ForumReply = require('./ForumReply.model');
+const Mentorship = require('./Mentorship.model');
+const LiveSession = require('./LiveSession.model');
+const LearningPath = require('./LearningPath.model');
+const Recommendation = require('./Recommendation.model');
+const Analytics = require('./Analytics.model');
+
 module.exports = {
   Section, Lecture, Enrollment, Order, Coupon, Review,
   Category, Tag, Quiz, QuizAttempt, Assignment, Submission,
   Certificate, Wishlist, Cart, Notification, NotificationPreference,
   Question, Payout,
+  // New Models for Advanced Features
+  Achievement, UserAchievement, Leaderboard,
+  DiscussionForum, ForumReply,
+  Mentorship, LiveSession, LearningPath,
+  Recommendation, Analytics,
 };

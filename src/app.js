@@ -74,6 +74,10 @@ const analyticsRoutes    = require('./routes/analytics.routes');
 const mediaRoutes        = require('./routes/media.routes');
 const healthRoutes       = require('./routes/health.routes');
 const adminRoutes        = require('./routes/admin.routes');
+// ─── NEW: Advanced Features ────────────────────────────────────────────────
+const discussionRoutes   = require('./routes/discussion.routes');
+const gamificationRoutes = require('./routes/gamification.routes');
+const personalizationRoutes = require('./routes/personalization.routes');
 
 // ─── App & Server Setup ────────────────────────────────────────────────────────
 const app = express();
@@ -181,6 +185,13 @@ app.use(`${API}/notifications`, notificationRoutes);
 
 // Q&A / Discussion
 app.use(API, qaRoutes);
+app.use(`${API}/discussions`, discussionRoutes);
+
+// ─── Gamification (Achievements, Leaderboards, Streaks) ──────────────────────
+app.use(`${API}/gamification`, gamificationRoutes);
+
+// ─── Personalization (Recommendations, Learning Paths, Advanced Analytics) ───
+app.use(`${API}/personalization`, personalizationRoutes);
 
 // Analytics
 app.use(API, analyticsRoutes);
