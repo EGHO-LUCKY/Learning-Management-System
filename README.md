@@ -341,44 +341,191 @@ User, Course, Enrollment, Section, Lecture, Quiz, Review, Category, Certificate,
 
 ## 📁 Project Structure
 
+### Complete Directory Tree
+
 ```
 Capstone LMS Project/
-├── src/
-│   ├── models/
-│   │   ├── Achievement.model.js              ✨ NEW
-│   │   ├── Leaderboard.model.js              ✨ NEW
-│   │   ├── DiscussionForum.model.js          ✨ NEW
-│   │   ├── Recommendation.model.js           ✨ NEW
-│   │   ├── Analytics.model.js                ✨ NEW
-│   │   ├── (other new models...)             ✨ NEW
-│   │   ├── User.model.js                     ✅ Original
-│   │   ├── Course.model.js                   ✅ Original
-│   │   └── index.js                          🔄 Updated
-│   ├── services/
-│   │   ├── gamification.service.js           ✨ NEW (280 lines)
-│   │   ├── recommendation.service.js         ✨ NEW (330 lines)
-│   │   ├── analytics.service.js              ✨ NEW (350 lines)
-│   │   └── (existing services)               ✅ Original
-│   ├── controllers/
-│   │   ├── discussion.controller.js          ✨ NEW (250 lines)
-│   │   ├── gamification.controller.js        ✨ NEW (220 lines)
-│   │   ├── personalization.controller.js     ✨ NEW (300 lines)
-│   │   └── (existing controllers)            ✅ Original
-│   ├── routes/
-│   │   ├── discussion.routes.js              ✨ NEW
-│   │   ├── gamification.routes.js            ✨ NEW
-│   │   ├── personalization.routes.js         ✨ NEW
-│   │   └── (existing routes)                 ✅ Original
-│   ├── middlewares/                          ✅ Original
-│   ├── utils/                                ✅ Original
-│   └── app.js                                🔄 Updated
-├── package.json                              🔄 Updated
-├── README.md                                 📖 This File
-├── START_HERE.md                             ✨ NEW
-├── ADVANCED_FEATURES_GUIDE.md                ✨ NEW
-├── FEATURES_INTEGRATION_GUIDE.md             ✨ NEW
-└── (10+ more documentation files)            ✨ NEW
+│
+├── 📄 Root Files
+│   ├── app.js                                # Main app entry point
+│   ├── package.json                          # Dependencies & scripts
+│   ├── README.md                             # This comprehensive documentation
+│   ├── .env.example                          # Environment variables template
+│   └── .gitignore                            # Git ignore rules
+│
+├── 📁 config/
+│   └── database.js                           # MongoDB connection configuration
+│
+├── 📁 logs/
+│   └── (Log files generated at runtime)      # Application logs
+│
+└── 📁 src/
+    ├── app.js                                # Express app setup & route mounting
+    │
+    ├── 📁 config/                            # Configuration files
+    │   └── (environment configurations)
+    │
+    ├── 📁 models/ (13 total)
+    │   ├── 📄 User.model.js                  ✅ Original - User profiles, roles, auth
+    │   ├── 📄 Course.model.js                ✅ Original - Course data, metadata
+    │   ├── 📄 Achievement.model.js           ✨ NEW - Gamification achievements
+    │   ├── 📄 UserAchievement.model.js       ✨ NEW - User achievement tracking
+    │   ├── 📄 Leaderboard.model.js           ✨ NEW - Leaderboard rankings
+    │   ├── 📄 Analytics.model.js             ✨ NEW - User analytics & metrics
+    │   ├── 📄 DiscussionForum.model.js       ✨ NEW - Forum discussion threads
+    │   ├── 📄 ForumReply.model.js            ✨ NEW - Forum discussion replies
+    │   ├── 📄 Recommendation.model.js        ✨ NEW - Personalized recommendations
+    │   ├── 📄 LearningPath.model.js          ✨ NEW - Learning path sequences
+    │   ├── 📄 LiveSession.model.js           ✨ NEW - Live session recordings
+    │   ├── 📄 Mentorship.model.js            ✨ NEW - Mentor-mentee relationships
+    │   └── 📄 index.js                       🔄 Updated - Model exports
+    │
+    ├── 📁 controllers/ (22 total)
+    │   ├── 📄 auth.controller.js             ✅ Original - Authentication logic
+    │   ├── 📄 user.controller.js             ✅ Original - User management
+    │   ├── 📄 course.controller.js           ✅ Original - Course operations
+    │   ├── 📄 curriculum.controller.js       ✅ Original - Curriculum management
+    │   ├── 📄 enrollment.controller.js       ✅ Original - Enrollment handling
+    │   ├── 📄 payment.controller.js          ✅ Original - Payment processing
+    │   ├── 📄 certificate.controller.js      ✅ Original - Certificate generation
+    │   ├── 📄 search.controller.js           ✅ Original - Search functionality
+    │   ├── 📄 quiz.controller.js             ✅ Original - Quiz management
+    │   ├── 📄 review.controller.js           ✅ Original - Course reviews
+    │   ├── 📄 qa.controller.js               ✅ Original - Q&A threads
+    │   ├── 📄 category.controller.js         ✅ Original - Category management
+    │   ├── 📄 media.controller.js            ✅ Original - Media upload & streaming
+    │   ├── 📄 notification.controller.js     ✅ Original - Notification handling
+    │   ├── 📄 cart.controller.js             ✅ Original - Shopping cart
+    │   ├── 📄 wishlist.controller.js         ✅ Original - Wishlist management
+    │   ├── 📄 health.controller.js           ✅ Original - Health checks
+    │   ├── 📄 gamification.controller.js     ✨ NEW - Achievements, leaderboards, streaks
+    │   ├── 📄 discussion.controller.js       ✨ NEW - Forum discussion management
+    │   ├── 📄 analytics.controller.js        ✨ NEW - Analytics & insights
+    │   └── 📄 personalization.controller.js  ✨ NEW - Recommendations & learning paths
+    │
+    ├── 📁 services/ (6 total)
+    │   ├── 📄 email.service.js               ✅ Original - Email notifications
+    │   ├── 📄 cloudinary.service.js          ✅ Original - Media storage & CDN
+    │   ├── 📄 notification.service.js        ✅ Original - Real-time notifications
+    │   ├── 📄 gamification.service.js        ✨ NEW (280 lines) - Achievement logic, XP calculations
+    │   ├── 📄 analytics.service.js           ✨ NEW (350 lines) - Metrics, predictions, insights
+    │   └── 📄 recommendation.service.js      ✨ NEW (330 lines) - Hybrid recommendation engine
+    │
+    ├── 📁 routes/ (22 total)
+    │   ├── 📄 auth.routes.js                 ✅ Original - Authentication endpoints
+    │   ├── 📄 user.routes.js                 ✅ Original - User endpoints
+    │   ├── 📄 course.routes.js               ✅ Original - Course endpoints
+    │   ├── 📄 curriculum.routes.js           ✅ Original - Curriculum endpoints
+    │   ├── 📄 enrollment.routes.js           ✅ Original - Enrollment endpoints
+    │   ├── 📄 payment.routes.js              ✅ Original - Payment endpoints
+    │   ├── 📄 certificate.routes.js          ✅ Original - Certificate endpoints
+    │   ├── 📄 search.routes.js               ✅ Original - Search endpoints
+    │   ├── 📄 quiz.routes.js                 ✅ Original - Quiz endpoints
+    │   ├── 📄 review.routes.js               ✅ Original - Review endpoints
+    │   ├── 📄 qa.routes.js                   ✅ Original - Q&A endpoints
+    │   ├── 📄 category.routes.js             ✅ Original - Category endpoints
+    │   ├── 📄 media.routes.js                ✅ Original - Media endpoints
+    │   ├── 📄 notification.routes.js         ✅ Original - Notification endpoints
+    │   ├── 📄 cart.routes.js                 ✅ Original - Cart endpoints
+    │   ├── 📄 wishlist.routes.js             ✅ Original - Wishlist endpoints
+    │   ├── 📄 health.routes.js               ✅ Original - Health check endpoints
+    │   ├── 📄 admin.routes.js                ✅ Original - Admin endpoints
+    │   ├── 📄 gamification.routes.js         ✨ NEW - Achievement endpoints
+    │   ├── 📄 discussion.routes.js           ✨ NEW - Forum endpoints
+    │   ├── 📄 analytics.routes.js            ✨ NEW - Analytics endpoints
+    │   └── 📄 personalization.routes.js      ✨ NEW - Recommendation endpoints
+    │
+    ├── 📁 middlewares/
+    │   ├── 📄 auth.middleware.js             ✅ JWT validation & role authorization
+    │   ├── 📄 validate.middleware.js         ✅ Input validation using express-validator
+    │   ├── 📄 errorHandler.js                ✅ Global error handling
+    │   ├── 📄 upload.middleware.js           ✅ File upload handling
+    │   └── 📄 rateLimiter.js                 ✅ Rate limiting for endpoints
+    │
+    └── 📁 utils/
+        ├── 📄 AppError.js                    ✅ Custom error class
+        ├── 📄 catchAsync.js                  ✅ Async error wrapper
+        ├── 📄 ApiFeatures.js                 ✅ Query filtering, sorting, pagination
+        ├── 📄 logger.js                      ✅ Winston logger configuration
+        └── 📄 tokenHelper.js                 ✅ JWT token generation & validation
+
 ```
+
+### File Statistics
+
+| Category | Count | Details |
+|----------|-------|---------|
+| **Models** | 13 | 10 original + 3 new (Gamification, Discussion, Analytics) |
+| **Controllers** | 22 | 18 original + 4 new |
+| **Routes** | 22 | 18 original + 4 new |
+| **Services** | 6 | 3 original + 3 new |
+| **Middlewares** | 5 | All original |
+| **Utils** | 5 | All original |
+| **Total Endpoints** | 125+ | 80+ original + 45+ new |
+| **Lines of New Code** | 2,500+ | Controllers, services, models, routes |
+
+### Module Breakdown
+
+**Authentication & Security** (Original)
+- `auth.controller.js` - JWT, MFA, OAuth, password reset
+- `auth.middleware.js` - Token validation, role authorization
+- `tokenHelper.js` - Token generation, verification
+
+**Course Management** (Original)
+- `course.controller.js` - Create, update, publish, delete courses
+- `curriculum.controller.js` - Sections, lectures, drag-and-drop reorder
+- `media.controller.js` - Video upload, streaming, transcoding
+- `category.controller.js` - Course categorization
+
+**Learning** (Original)
+- `enrollment.controller.js` - Free/paid enrollment, progress tracking
+- `quiz.controller.js` - Timed quizzes, auto-grading
+- `certificate.controller.js` - PDF generation, QR verification
+
+**Community & Discussion** (New & Original)
+- `discussion.controller.js` ✨ - Forum threads, replies, voting
+- `qa.controller.js` ✅ - Q&A with instructor marking
+- `review.controller.js` ✅ - Course reviews, ratings
+
+**Gamification** (New)
+- `gamification.controller.js` - Achievements, leaderboards, streaks, XP
+- `gamification.service.js` - Achievement unlock logic, XP calculations
+- `Achievement.model.js` - Achievement definitions
+- `UserAchievement.model.js` - User achievement tracking
+- `Leaderboard.model.js` - Ranking data
+
+**AI & Personalization** (New)
+- `personalization.controller.js` - Recommendations, learning paths
+- `recommendation.service.js` - Hybrid recommendation engine
+- `Recommendation.model.js` - Recommendation data
+- `LearningPath.model.js` - Personalized course sequences
+
+**Analytics & Insights** (New)
+- `analytics.controller.js` - User metrics, success predictions, insights
+- `analytics.service.js` - Data aggregation, ML predictions
+- `Analytics.model.js` - Metric storage
+
+**Commerce** (Original)
+- `payment.controller.js` - Stripe integration, webhooks
+- `cart.controller.js` - Shopping cart management
+- `wishlist.controller.js` - Course wishlist
+
+**Notifications & Communication** (Original)
+- `notification.controller.js` - Real-time notifications
+- `notification.service.js` - Email, Socket.io
+- `email.service.js` - Nodemailer integration
+
+**Other Features** (Original)
+- `search.controller.js` - Full-text search, autocomplete
+- `user.controller.js` - User profiles, preferences
+- `health.controller.js` - API health checks
+- `cloudinary.service.js` - Media storage, CDN
+
+### Legend
+
+- ✅ **Original** - Features from v1.0 (still working, backward compatible)
+- ✨ **NEW** - Features added in v2.0 (April-May 2026)
+- 🔄 **Updated** - Modified from original version
 
 ---
 
