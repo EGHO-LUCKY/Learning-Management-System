@@ -1,31 +1,27 @@
 // ─── Error Handler Middleware ─────────────────────────────────────────────────
 const logger = require('../utils/logger');
+const { AppError } = require('../utils/AppError');
 
 const handleCastError = (err) => {
   const message = `Invalid ${err.path}: ${err.value}`;
-  const { AppError } = require('../utils/AppError');
   return new AppError(message, 400);
 };
 
 const handleDuplicateKeyError = (err) => {
   const field = Object.keys(err.keyValue)[0];
-  const { AppError } = require('../utils/AppError');
   return new AppError(`${field} already exists. Please use a different value.`, 409);
 };
 
 const handleValidationError = (err) => {
   const errors = Object.values(err.errors).map(e => e.message);
-  const { AppError } = require('../utils/AppError');
   return new AppError(`Validation failed: ${errors.join('. ')}`, 422);
 };
 
 const handleJWTError = () => {
-  const { AppError } = require('../utils/AppError');
   return new AppError('Invalid token. Please log in again.', 401);
 };
 
 const handleJWTExpiredError = () => {
-  const { AppError } = require('../utils/AppError');
   return new AppError('Your session has expired. Please log in again.', 401);
 };
 

@@ -48,8 +48,28 @@ const achievementSchema = new mongoose.Schema(
       ],
       required: true,
     },
-    triggerCondition: mongoose.Schema.Types.Mixed, // JSON config for condition logic
-    courseId: mongoose.Schema.Types.ObjectId, // For course-specific achievements
+    triggerCondition: {
+      type: mongoose.Schema.Types.Mixed,
+      required: true,
+      validate: {
+        validator: function(value) {
+          // Validate structure based on triggerType
+          if (this.triggerType === 'course-completion') {
+            return value && typeof value.courseCount === 'number';
+          }
+          if (this.triggerType === 'streak') {
+            return value && typeof value.days === 'number';
+          }
+          if (this.triggerType === 'perfect-quiz') {
+            return value && value.courseId;
+          }
+          // For other trigger types, basic validation
+          return true;
+        },
+        message: 'Invalid trigger condition structure for the specified trigger type'
+      }
+    }, // JSON config for condition logic
+    courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' }, // For course-specific achievements
     isActive: { type: Boolean, default: true },
 
     // Stats

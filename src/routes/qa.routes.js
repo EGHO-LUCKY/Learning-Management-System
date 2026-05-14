@@ -11,7 +11,7 @@ router.post('/courses/:courseId/questions', protect,
   validate, ctrl.postQuestion);
 router.put('/questions/:questionId', protect, ctrl.updateQuestion);
 router.delete('/questions/:questionId', protect, ctrl.deleteQuestion);
-router.post('/questions/:questionId/answers', protect, [body('body').notEmpty()], validate, ctrl.postAnswer);
+router.post('/questions/:questionId/answers', protect, [body('body').notEmpty().isLength({ max: 5000 })], validate, ctrl.postAnswer);
 router.put('/questions/:questionId/answers/:answerId', protect, ctrl.updateAnswer);
 router.delete('/questions/:questionId/answers/:answerId', protect, ctrl.deleteAnswer);
 router.post('/questions/:questionId/answers/:answerId/upvote', protect, ctrl.upvoteAnswer);

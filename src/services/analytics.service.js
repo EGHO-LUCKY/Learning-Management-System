@@ -158,7 +158,9 @@ class AnalyticsService {
 
       // Calculate aggregated metrics
       const enrollments = await Enrollment.find({ student: { $in: userIds } });
-      const avgCompletionRate = enrollments.reduce((sum, e) => sum + e.completionPercentage, 0) / enrollments.length;
+      const avgCompletionRate = enrollments.length > 0
+        ? enrollments.reduce((sum, e) => sum + e.completionPercentage, 0) / enrollments.length
+        : 0;
       const completedCount = enrollments.filter(e => e.isCompleted).length;
 
       return {

@@ -50,5 +50,13 @@ const mentorshipSchema = new mongoose.Schema(
 mentorshipSchema.index({ mentor: 1, status: 1 });
 mentorshipSchema.index({ mentee: 1, status: 1 });
 mentorshipSchema.index({ course: 1, status: 1 });
+// Prevent duplicate active mentorships between same mentor and mentee
+mentorshipSchema.index(
+  { mentor: 1, mentee: 1, status: 1 },
+  { 
+    unique: true,
+    partialFilterExpression: { status: { $in: ['pending', 'active'] } }
+  }
+);
 
 module.exports = mongoose.model('Mentorship', mentorshipSchema);

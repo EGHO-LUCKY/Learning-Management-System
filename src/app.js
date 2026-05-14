@@ -208,10 +208,27 @@ app.use(errorHandler);
 
 // ─── Database + Server Start ──────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
+const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
 
-mongoose.connect(process.env.MONGODB_URI)
+if (!mongoUri) {
+  logger.error('❌ MongoDB URI not configured. Set MONGO_URI or MONGODB_URI in .env file');
+  process.exit(1);
+}
+
+mongoose.connect(mongoUri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  maxPoolSize: 10,
+  minPoolSize: 2,
+  maxIdleTimeMS: 45000,
+  serverSelectionTimeoutMS: 10000,
+  socketTimeoutMS: 45000,
+})
   .then(() => {
-    logger.info('✅ MongoDB connected');
+    logger.info('✅ MongoDB connected successfully');
+    logger.info(`📊 Database: ${mongoose.connection.db.databaseName}`);
+    logger.info(`🔗 Host: ${mongoose.connection.host}`);
+    
     server.listen(PORT, () => {
       logger.info(`🚀 LMS API running → http://localhost:${PORT}`);
       logger.info(`📚 API Docs      → http://localhost:${PORT}/api/docs`);
@@ -221,8 +238,26 @@ mongoose.connect(process.env.MONGODB_URI)
   })
   .catch((err) => {
     logger.error('❌ MongoDB connection failed:', err.message);
+    logger.error('📝 Full error details:', {
+      name: err.name,
+      message: err.message,
+      code: err.code,
+    });
     process.exit(1);
   });
+
+// Connection event listeners
+mongoose.connection.on('disconnected', () => {
+  logger.warn('⚠️  MongoDB disconnected');
+});
+
+mongoose.connection.on('reconnected', () => {
+  logger.info('✅ MongoDB reconnected');
+});
+
+mongoose.connection.on('error', (err) => {
+  logger.error('❌ MongoDB connection error:', err.message);
+});
 
 // Graceful shutdown
 process.on('SIGTERM', () => {

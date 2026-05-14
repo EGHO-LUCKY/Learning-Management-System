@@ -32,7 +32,7 @@ const forumReplySchema = new mongoose.Schema(
     isAnonymous: { type: Boolean, default: false },
     isEdited: { type: Boolean, default: false },
     editedAt: Date,
-    parentReplyId: mongoose.Schema.Types.ObjectId, // For nested replies
+    parentReplyId: { type: mongoose.Schema.Types.ObjectId, ref: 'ForumReply', index: true }, // For nested replies
   },
   {
     timestamps: true,

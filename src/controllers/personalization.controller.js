@@ -45,6 +45,12 @@ exports.trackRecommendationEngagement = catchAsync(async (req, res) => {
   const { action } = req.body; // 'view', 'click', 'enroll', 'helpful'
   const userId = req.user._id;
 
+  // Validate action parameter
+  const validActions = ['view', 'click', 'enroll', 'helpful'];
+  if (!validActions.includes(action)) {
+    throw new AppError('Invalid action. Must be one of: view, click, enroll, helpful', 400);
+  }
+
   await RecommendationEngine.trackRecommendationEngagement(userId, courseId, action);
 
   res.json({
@@ -173,7 +179,7 @@ exports.createLearningPath = catchAsync(async (req, res) => {
     courses: courses || [],
     skills: skills || [],
     difficulty: difficulty || 'beginner',
-    isPublic: isPublic || true,
+    isPublic: isPublic ?? false,
   });
 
   res.status(201).json({

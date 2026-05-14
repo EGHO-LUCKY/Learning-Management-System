@@ -80,3 +80,5 @@
 [2026-05-08 14:57:41] [32minfo[39m: 📚 API Docs      → http://localhost:5000/api/docs
 [2026-05-08 14:57:41] [32minfo[39m: ❤️  Health check  → http://localhost:5000/api/v1/health
 [2026-05-08 14:57:41] [32minfo[39m: Environment: development
+[2026-05-13 09:02:20] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
+[2026-05-13 09:02:31] [33mwarn[39m: ⚠️  MongoDB disconnected

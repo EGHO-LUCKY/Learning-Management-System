@@ -26,10 +26,14 @@ router.put('/settings', protect, restrictTo('admin'), catchAsync(async (req, res
 }));
 
 router.get('/audit-logs', protect, restrictTo('admin'), (req, res) => {
-  const { page = 1, limit = 50 } = req.query;
+  // Sanitize pagination parameters
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 50));
+  const offset = (page - 1) * limit;
+  
   const total = auditLogs.length;
-  const logs = auditLogs.slice((page - 1) * limit, page * limit);
-  res.json({ success: true, data: logs, meta: { total, page: +page, limit: +limit } });
+  const logs = auditLogs.slice(offset, offset + limit);
+  res.json({ success: true, data: logs, meta: { total, page, limit } });
 });
 
 module.exports = router;

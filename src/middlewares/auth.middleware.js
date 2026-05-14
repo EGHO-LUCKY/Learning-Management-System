@@ -40,4 +40,7 @@ const optionalAuth = async (req, res, next) => {
   next();
 };
 
-module.exports = { protect, restrictTo, optionalAuth };
+// Alias for restrictTo for flexibility in route definitions
+const authorize = restrictTo;
+
+module.exports = { protect, restrictTo, authorize, optionalAuth };
