@@ -18,7 +18,7 @@ exports.getNotifications = catchAsync(async (req, res) => {
   res.json({
     success: true,
     data: notifications,
-    meta: { page: +page, limit: +limit, total, unreadCount, totalPages: Math.ceil(total / limit) },
+    meta: { page: +page, limit: +limit, total, unreadCount, totalPages: Math.ceil(total / +limit) },
   });
 });
 

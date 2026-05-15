@@ -112,20 +112,30 @@ exports.downloadCertificate = catchAsync(async (req, res) => {
 
   if (!certificate) throw new AppError('Certificate not found', 404);
 
-  // Regenerate PDF on demand for freshness
-  const course = await Course.findById(certificate.course).populate('instructor', 'name');
-  const pdfBuffer = await generateCertificatePDF({
-    studentName: certificate.student.name,
-    courseName: course.title,
-    instructorName: course.instructor.name,
-    verificationCode: certificate.verificationCode,
-    completedAt: certificate.issuedAt,
-  });
+  // Stream existing PDF from storage if available, otherwise generate and cache
+  if (certificate.pdfUrl) {
+    const response = await fetch(certificate.pdfUrl);
+    const pdfBuffer = Buffer.from(await response.arrayBuffer());
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="certificate-${certificate.verificationCode}.pdf"`);
+    res.setHeader('Content-Length', pdfBuffer.length);
+    res.end(pdfBuffer);
+  } else {
+    // Generate PDF for first-time download
+    const course = await Course.findById(certificate.course).populate('instructor', 'name');
+    const pdfBuffer = await generateCertificatePDF({
+      studentName: certificate.student.name,
+      courseName: course.title,
+      instructorName: course.instructor.name,
+      verificationCode: certificate.verificationCode,
+      completedAt: certificate.issuedAt,
+    });
 
-  res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', `attachment; filename="certificate-${certificate.verificationCode}.pdf"`);
-  res.setHeader('Content-Length', pdfBuffer.length);
-  res.end(pdfBuffer);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="certificate-${certificate.verificationCode}.pdf"`);
+    res.setHeader('Content-Length', pdfBuffer.length);
+    res.end(pdfBuffer);
+  }
 });
 
 // ─── Verify Certificate (public) ──────────────────────────────────────────────
@@ -232,7 +242,7 @@ function generateCertificatePDF({ studentName, courseName, instructorName, verif
       .font('Helvetica')
       .text(`Verification Code: ${verificationCode}`, 0, H - 55, { align: 'center', characterSpacing: 1 });
 
-    doc.text(`Verify at: ${process.env.FRONTEND_URL}/verify/${verificationCode}`, 0, H - 42, { align: 'center' });
+    doc.text(`Verify at: ${process.env.FRONTEND_URL || 'https://lmsacademy.com'}/verify/${verificationCode}`, 0, H - 42, { align: 'center' });
 
     doc.end();
   });

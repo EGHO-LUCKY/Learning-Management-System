@@ -58,9 +58,9 @@ class ApiFeatures {
     const limit = Math.min(100, Math.max(1, parseInt(this.queryStr.limit, 10) || 20));
     const skip = (page - 1) * limit;
 
-    // Count total for meta
-    const countQuery = this.query.model.find(this.query._conditions);
-    const total = await countQuery.countDocuments();
+    // Count total for meta - use public getFilter() API for forward compatibility
+    const filter = this.query.getFilter();
+    const total = await this.query.model.countDocuments(filter);
 
     this.query = this.query.skip(skip).limit(limit);
     this.meta = {
