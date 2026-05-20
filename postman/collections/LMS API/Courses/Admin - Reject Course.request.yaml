@@ -1,5 +1,5 @@
 $kind: http-request
-url: "{{baseUrl}}/api/v1/courses/admin/:courseId/reject"
+url: "{{baseUrl}}/api/v1/admin/courses/:courseId/reject"
 method: POST
 pathVariables:
   courseId: "{{courseId}}"

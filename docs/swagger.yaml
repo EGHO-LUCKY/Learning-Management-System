@@ -611,13 +611,13 @@ paths:
         schema:
           type: string
         example: '{{courseId}}'
-  /api/v1/courses/admin/all:
+  /api/v1/admin/courses:
     get:
       summary: Admin - Get All Courses
       responses: {}
       tags:
         - Courses
-  '/api/v1/courses/admin/{courseId}/approve':
+  '/api/v1/admin/courses/{courseId}/approve':
     post:
       summary: Admin - Approve Course
       responses: {}
@@ -630,9 +630,22 @@ paths:
         schema:
           type: string
         example: '{{courseId}}'
-  '/api/v1/courses/admin/{courseId}/reject':
+  '/api/v1/admin/courses/{courseId}/reject':
     post:
       summary: Admin - Reject Course
+      responses: {}
+      tags:
+        - Courses
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  '/api/v1/admin/courses/{courseId}':
+    delete:
+      summary: Admin - Delete Course
       responses: {}
       tags:
         - Courses
@@ -1600,6 +1613,37 @@ paths:
       responses: {}
       tags:
         - Payments
+  '/api/v1/admin/coupons/{couponId}':
+    put:
+      summary: Admin - Update Coupon
+      responses: {}
+      tags:
+        - Payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: couponId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{couponId}}'
+    delete:
+      summary: Admin - Delete Coupon
+      responses: {}
+      tags:
+        - Payments
+    parameters:
+      - name: couponId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{couponId}}'
   /api/v1/instructor/earnings:
     get:
       summary: Get Instructor Earnings
