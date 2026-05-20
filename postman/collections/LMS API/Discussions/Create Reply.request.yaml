@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/discussions/discussions/:threadId/replies"
+method: POST
+headers:
+  Content-Type: application/json
+pathVariables:
+  threadId: "{{threadId}}"
+body:
+  type: json
+  content: |-
+    {
+      "body": "My reply..."
+    }
+order: 5000

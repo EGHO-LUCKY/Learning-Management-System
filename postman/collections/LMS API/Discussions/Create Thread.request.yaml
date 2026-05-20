@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/discussions/courses/:courseId/discussions"
+method: POST
+headers:
+  Content-Type: application/json
+pathVariables:
+  courseId: "{{courseId}}"
+body:
+  type: json
+  content: |-
+    {
+      "title": "Discussion topic",
+      "body": "Let's discuss..."
+    }
+order: 4000

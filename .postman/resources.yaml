@@ -1,0 +1,10 @@
+workspace:
+  id: 1815ca21-85c4-4d6f-aa6a-ad363a61288d
+localResources:
+  collections:
+    - ../postman/collections/LMS API
+  specs:
+    - ../postman/specs/LMS API/LMS API.yaml
+cloudResources:
+  collections:
+    ../postman/collections/LMS API: 34255376-4976bb54-abc2-4934-86e2-ff1310371591

@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/instructor/assignments/:assignmentId"
+method: DELETE
+pathVariables:
+  assignmentId: "{{assignmentId}}"
+order: 10200

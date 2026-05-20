@@ -1,0 +1,11 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/media/upload/video/:uploadId/complete"
+method: POST
+headers:
+  Content-Type: application/json
+pathVariables:
+  uploadId: "{{uploadId}}"
+body:
+  type: json
+  content: "{}"
+order: 4000

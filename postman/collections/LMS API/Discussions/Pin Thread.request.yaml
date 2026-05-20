@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/discussions/discussions/:threadId/pin"
+method: PATCH
+pathVariables:
+  threadId: "{{threadId}}"
+order: 8000

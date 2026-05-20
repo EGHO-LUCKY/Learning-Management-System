@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/users/me"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "John Doe",
+      "bio": "A learner",
+      "headline": "Software Engineer",
+      "website": "https://example.com"
+    }
+order: 2000

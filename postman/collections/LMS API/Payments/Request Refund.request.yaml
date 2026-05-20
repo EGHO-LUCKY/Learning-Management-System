@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/payments/orders/:orderId/refund"
+method: POST
+pathVariables:
+  orderId: "{{orderId}}"
+order: 6000

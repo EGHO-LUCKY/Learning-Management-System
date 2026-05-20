@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/instructor/courses/:courseId/sections"
+method: POST
+headers:
+  Content-Type: application/json
+pathVariables:
+  courseId: "{{courseId}}"
+body:
+  type: json
+  content: |-
+    {
+      "title": "Section 1"
+    }
+order: 2000

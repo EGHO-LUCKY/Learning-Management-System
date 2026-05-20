@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/search/suggestions?q=java"
+method: GET
+queryParams:
+  q: java
+order: 2000

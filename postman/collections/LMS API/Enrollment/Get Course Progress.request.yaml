@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/enrollments/progress/:courseId"
+method: GET
+pathVariables:
+  courseId: "{{courseId}}"
+order: 5000

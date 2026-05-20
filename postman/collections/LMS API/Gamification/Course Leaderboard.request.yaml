@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/gamification/leaderboards/courses/:courseId"
+method: GET
+pathVariables:
+  courseId: "{{courseId}}"
+order: 5000

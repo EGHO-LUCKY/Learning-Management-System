@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/discussions/replies/:replyId/answer/:threadId"
+method: PATCH
+pathVariables:
+  replyId: "{{replyId}}"
+  threadId: "{{threadId}}"
+order: 11000

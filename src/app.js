@@ -13,6 +13,7 @@ const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
 
 const logger = require('./utils/logger');
+const connectDB = require('../config/database');
 const { errorHandler, notFound } = require('./middlewares/errorHandler');
 const { authLimiter, publicLimiter } = require('./middlewares/rateLimiter');
 
@@ -74,7 +75,6 @@ const analyticsRoutes    = require('./routes/analytics.routes');
 const mediaRoutes        = require('./routes/media.routes');
 const healthRoutes       = require('./routes/health.routes');
 const adminRoutes        = require('./routes/admin.routes');
-// ─── NEW: Advanced Features ────────────────────────────────────────────────
 const discussionRoutes   = require('./routes/discussion.routes');
 const gamificationRoutes = require('./routes/gamification.routes');
 const personalizationRoutes = require('./routes/personalization.routes');
@@ -208,55 +208,14 @@ app.use(errorHandler);
 
 // ─── Database + Server Start ──────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
-const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
 
-if (!mongoUri) {
-  logger.error('❌ MongoDB URI not configured. Set MONGO_URI or MONGODB_URI in .env file');
-  process.exit(1);
-}
-
-mongoose.connect(mongoUri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  maxPoolSize: 10,
-  minPoolSize: 2,
-  maxIdleTimeMS: 45000,
-  serverSelectionTimeoutMS: 10000,
-  socketTimeoutMS: 45000,
-})
-  .then(() => {
-    logger.info('✅ MongoDB connected successfully');
-    logger.info(`📊 Database: ${mongoose.connection.db.databaseName}`);
-    logger.info(`🔗 Host: ${mongoose.connection.host}`);
-    
-    server.listen(PORT, () => {
-      logger.info(`🚀 LMS API running → http://localhost:${PORT}`);
-      logger.info(`📚 API Docs      → http://localhost:${PORT}/api/docs`);
-      logger.info(`❤️  Health check  → http://localhost:${PORT}/api/v1/health`);
-      logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
-    });
-  })
-  .catch((err) => {
-    logger.error('❌ MongoDB connection failed:', err.message);
-    logger.error('📝 Full error details:', {
-      name: err.name,
-      message: err.message,
-      code: err.code,
-    });
-    process.exit(1);
+connectDB().then(() => {
+  server.listen(PORT, () => {
+    logger.info(`🚀 LMS API running → http://localhost:${PORT}`);
+    logger.info(`📚 API Docs      → http://localhost:${PORT}/api/docs`);
+    logger.info(`❤️  Health check  → http://localhost:${PORT}/api/v1/health`);
+    logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
   });
-
-// Connection event listeners
-mongoose.connection.on('disconnected', () => {
-  logger.warn('⚠️  MongoDB disconnected');
-});
-
-mongoose.connection.on('reconnected', () => {
-  logger.info('✅ MongoDB reconnected');
-});
-
-mongoose.connection.on('error', (err) => {
-  logger.error('❌ MongoDB connection error:', err.message);
 });
 
 // Graceful shutdown

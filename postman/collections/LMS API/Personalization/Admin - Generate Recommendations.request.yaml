@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/personalization/recommendations/generate"
+method: POST
+order: 15000

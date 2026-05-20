@@ -1,0 +1,11 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/users/admin/users/:userId"
+method: PUT
+headers:
+  Content-Type: application/json
+pathVariables:
+  userId: "{{userId}}"
+body:
+  type: json
+  content: "{}"
+order: 9000

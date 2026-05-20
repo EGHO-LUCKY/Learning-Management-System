@@ -1,0 +1,11 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/admin/categories/:categoryId"
+method: PUT
+headers:
+  Content-Type: application/json
+pathVariables:
+  categoryId: "{{categoryId}}"
+body:
+  type: json
+  content: "{}"
+order: 4000

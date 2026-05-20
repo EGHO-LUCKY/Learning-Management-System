@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/enrollments/progress/:courseId/lectures/:lectureId/position"
+method: PUT
+headers:
+  Content-Type: application/json
+pathVariables:
+  courseId: "{{courseId}}"
+  lectureId: "{{lectureId}}"
+body:
+  type: json
+  content: |-
+    {
+      "positionSeconds": 120
+    }
+order: 8000

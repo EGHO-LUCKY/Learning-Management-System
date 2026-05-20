@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/gamification/users/:userId/leaderboard"
+method: GET
+pathVariables:
+  userId: "{{userId}}"
+order: 15000

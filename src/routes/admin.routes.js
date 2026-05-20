@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { protect, restrictTo } = require('../middlewares/auth.middleware');
 const catchAsync = require('../utils/catchAsync');
+const courseCtrl = require('../controllers/course.controller');
 
 let platformSettings = {
   maintenanceMode: false,
@@ -35,5 +36,11 @@ router.get('/audit-logs', protect, restrictTo('admin'), (req, res) => {
   const logs = auditLogs.slice(offset, offset + limit);
   res.json({ success: true, data: logs, meta: { total, page, limit } });
 });
+
+// ─── Admin Course Management ──────────────────────────────────────────────────
+router.get('/courses', protect, restrictTo('admin'), courseCtrl.adminGetCourses);
+router.post('/courses/:courseId/approve', protect, restrictTo('admin'), courseCtrl.approveCourse);
+router.post('/courses/:courseId/reject', protect, restrictTo('admin'), courseCtrl.rejectCourse);
+router.delete('/courses/:courseId', protect, restrictTo('admin'), courseCtrl.adminDeleteCourse);
 
 module.exports = router;

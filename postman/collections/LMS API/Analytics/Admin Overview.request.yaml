@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/admin/analytics/overview"
+method: GET
+order: 6000

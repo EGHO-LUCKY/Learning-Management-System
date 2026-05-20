@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/personalization/recommendations"
+method: GET
+order: 3000

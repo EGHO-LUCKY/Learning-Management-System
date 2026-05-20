@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/personalization/learning-paths/:pathId/enroll"
+method: POST
+pathVariables:
+  pathId: "{{pathId}}"
+order: 11000

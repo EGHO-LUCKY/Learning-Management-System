@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/notifications/:notificationId/read"
+method: PUT
+pathVariables:
+  notificationId: "{{notificationId}}"
+order: 5000

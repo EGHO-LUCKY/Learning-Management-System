@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/admin/analytics/revenue"
+method: GET
+order: 7000

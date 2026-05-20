@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/admin/tags/:tagId"
+method: DELETE
+pathVariables:
+  tagId: "{{tagId}}"
+order: 8000

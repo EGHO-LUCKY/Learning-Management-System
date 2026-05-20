@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/certificates/verify/:verificationCode"
+method: GET
+pathVariables:
+  verificationCode: "{{verificationCode}}"
+order: 3000

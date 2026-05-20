@@ -3,6 +3,7 @@ const express = require('express');
 const quizRouter = express.Router();
 const { protect, restrictTo } = require('../middlewares/auth.middleware');
 const ctrl = require('../controllers/quiz.controller');
+const assignCtrl = require('../controllers/assignment.controller');
 const { uploadAttachment } = require('../middlewares/upload.middleware');
 
 quizRouter.post('/instructor/lectures/:lectureId/quiz', protect, restrictTo('instructor', 'admin'), ctrl.createQuiz);
@@ -14,9 +15,11 @@ quizRouter.post('/quizzes/:quizId/attempt', protect, ctrl.submitAttempt);
 quizRouter.get('/quizzes/:quizId/attempts', protect, ctrl.getAttempts);
 quizRouter.get('/quizzes/:quizId/attempts/:attemptId', protect, ctrl.getAttemptDetail);
 
-quizRouter.post('/instructor/lectures/:lectureId/assignment', protect, restrictTo('instructor', 'admin'), ctrl.createAssignment);
-quizRouter.post('/assignments/:assignmentId/submit', protect, uploadAttachment, ctrl.submitAssignment);
-quizRouter.get('/instructor/assignments/:assignmentId/submissions', protect, restrictTo('instructor', 'admin'), ctrl.getSubmissions);
-quizRouter.put('/instructor/assignments/:assignmentId/submissions/:submissionId/grade', protect, restrictTo('instructor', 'admin'), ctrl.gradeSubmission);
+quizRouter.post('/instructor/lectures/:lectureId/assignment', protect, restrictTo('instructor', 'admin'), assignCtrl.createAssignment);
+quizRouter.put('/instructor/assignments/:assignmentId', protect, restrictTo('instructor', 'admin'), assignCtrl.updateAssignment);
+quizRouter.delete('/instructor/assignments/:assignmentId', protect, restrictTo('instructor', 'admin'), assignCtrl.deleteAssignment);
+quizRouter.post('/assignments/:assignmentId/submit', protect, uploadAttachment, assignCtrl.submitAssignment);
+quizRouter.get('/instructor/assignments/:assignmentId/submissions', protect, restrictTo('instructor', 'admin'), assignCtrl.getSubmissions);
+quizRouter.put('/instructor/assignments/:assignmentId/submissions/:submissionId/grade', protect, restrictTo('instructor', 'admin'), assignCtrl.gradeSubmission);
 
 module.exports = quizRouter;

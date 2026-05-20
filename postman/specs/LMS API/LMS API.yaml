@@ -1,0 +1,2604 @@
+openapi: 3.0.0
+info:
+  title: LMS API
+  version: 1.0.0
+  description: 'Complete API collection for the Learning Management System backend. Covers authentication, courses, enrollment, payments, gamification, and more.'
+servers:
+  - url: 'http://localhost:5000'
+paths:
+  /api/v1/admin/settings:
+    get:
+      summary: Get Platform Settings
+      responses: {}
+      tags:
+        - Admin
+    put:
+      summary: Update Platform Settings
+      responses: {}
+      tags:
+        - Admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                maintenanceMode:
+                  type: boolean
+                allowNewRegistrations:
+                  type: boolean
+            example:
+              maintenanceMode: false
+              allowNewRegistrations: true
+  /api/v1/admin/audit-logs:
+    get:
+      summary: Get Audit Logs
+      responses: {}
+      tags:
+        - Admin
+  /api/v1/instructor/analytics/overview:
+    get:
+      summary: Instructor Overview
+      responses: {}
+      tags:
+        - Analytics
+  /api/v1/instructor/analytics/revenue:
+    get:
+      summary: Instructor Revenue
+      responses: {}
+      tags:
+        - Analytics
+  /api/v1/instructor/analytics/enrollments:
+    get:
+      summary: Instructor Enrollments
+      responses: {}
+      tags:
+        - Analytics
+  '/api/v1/instructor/analytics/courses/{courseId}':
+    get:
+      summary: Instructor Course Analytics
+      responses: {}
+      tags:
+        - Analytics
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  /api/v1/instructor/analytics/reviews:
+    get:
+      summary: Instructor Review Trends
+      responses: {}
+      tags:
+        - Analytics
+  /api/v1/admin/analytics/overview:
+    get:
+      summary: Admin Overview
+      responses: {}
+      tags:
+        - Analytics
+  /api/v1/admin/analytics/revenue:
+    get:
+      summary: Admin Revenue
+      responses: {}
+      tags:
+        - Analytics
+  /api/v1/admin/analytics/users:
+    get:
+      summary: Admin User Growth
+      responses: {}
+      tags:
+        - Analytics
+  /api/v1/admin/analytics/courses:
+    get:
+      summary: Admin Course Performance
+      responses: {}
+      tags:
+        - Analytics
+  /api/v1/admin/analytics/reports/export:
+    post:
+      summary: Export Report
+      responses: {}
+      tags:
+        - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+  /api/v1/auth/register:
+    post:
+      summary: Register
+      responses: {}
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                role:
+                  type: string
+            example:
+              name: John Doe
+              email: john@example.com
+              password: Password1
+              role: student
+  /api/v1/auth/login:
+    post:
+      summary: Login
+      responses: {}
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+            example:
+              email: john@example.com
+              password: Password1
+  /api/v1/auth/logout:
+    post:
+      summary: Logout
+      responses: {}
+      tags:
+        - Auth
+  /api/v1/auth/refresh-token:
+    post:
+      summary: Refresh Token
+      responses: {}
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+            example:
+              refreshToken: ''
+  /api/v1/auth/forgot-password:
+    post:
+      summary: Forgot Password
+      responses: {}
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+            example:
+              email: john@example.com
+  '/api/v1/auth/reset-password/{token}':
+    post:
+      summary: Reset Password
+      responses: {}
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newPassword:
+                  type: string
+            example:
+              newPassword: NewPassword1
+    parameters:
+      - name: token
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{resetToken}}'
+  '/api/v1/auth/verify-email/{token}':
+    post:
+      summary: Verify Email
+      responses: {}
+      tags:
+        - Auth
+    parameters:
+      - name: token
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{verifyToken}}'
+  /api/v1/auth/resend-verification:
+    post:
+      summary: Resend Verification
+      responses: {}
+      tags:
+        - Auth
+  /api/v1/auth/google:
+    get:
+      summary: Google OAuth
+      responses: {}
+      tags:
+        - Auth
+  /api/v1/auth/github:
+    get:
+      summary: GitHub OAuth
+      responses: {}
+      tags:
+        - Auth
+  /api/v1/auth/mfa/enable:
+    post:
+      summary: Enable MFA
+      responses: {}
+      tags:
+        - Auth
+  /api/v1/auth/mfa/verify:
+    post:
+      summary: Verify MFA
+      responses: {}
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                totpCode:
+                  type: string
+                  format: color
+            example:
+              totpCode: '123456'
+  /api/v1/auth/mfa/disable:
+    post:
+      summary: Disable MFA
+      responses: {}
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                totpCode:
+                  type: string
+                  format: color
+            example:
+              totpCode: '123456'
+  /api/v1/cart:
+    get:
+      summary: Get Cart
+      responses: {}
+      tags:
+        - Cart
+    post:
+      summary: Add to Cart
+      responses: {}
+      tags:
+        - Cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                courseId:
+                  type: string
+            example:
+              courseId: ''
+    delete:
+      summary: Clear Cart
+      responses: {}
+      tags:
+        - Cart
+  '/api/v1/cart/{courseId}':
+    delete:
+      summary: Remove from Cart
+      responses: {}
+      tags:
+        - Cart
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  /api/v1/cart/coupon:
+    post:
+      summary: Apply Coupon
+      responses: {}
+      tags:
+        - Cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+            example:
+              code: SAVE20
+    delete:
+      summary: Remove Coupon
+      responses: {}
+      tags:
+        - Cart
+  /api/v1/categories:
+    get:
+      summary: Get All Categories
+      responses: {}
+      tags:
+        - Categories
+  '/api/v1/categories/{categoryId}/courses':
+    get:
+      summary: Get Courses by Category
+      responses: {}
+      tags:
+        - Categories
+    parameters:
+      - name: categoryId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{categoryId}}'
+  /api/v1/admin/categories:
+    post:
+      summary: Admin - Create Category
+      responses: {}
+      tags:
+        - Categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+            example:
+              name: Programming
+  '/api/v1/admin/categories/{categoryId}':
+    put:
+      summary: Admin - Update Category
+      responses: {}
+      tags:
+        - Categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: categoryId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{categoryId}}'
+    delete:
+      summary: Admin - Delete Category
+      responses: {}
+      tags:
+        - Categories
+  /api/v1/tags:
+    get:
+      summary: Get All Tags
+      responses: {}
+      tags:
+        - Categories
+  /api/v1/admin/tags:
+    post:
+      summary: Admin - Create Tag
+      responses: {}
+      tags:
+        - Categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+            example:
+              name: javascript
+  '/api/v1/admin/tags/{tagId}':
+    delete:
+      summary: Admin - Delete Tag
+      responses: {}
+      tags:
+        - Categories
+    parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{tagId}}'
+  '/api/v1/certificates/generate/{courseId}':
+    post:
+      summary: Generate Certificate
+      responses: {}
+      tags:
+        - Certificates
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  /api/v1/certificates/me:
+    get:
+      summary: Get My Certificates
+      responses: {}
+      tags:
+        - Certificates
+  '/api/v1/certificates/verify/{verificationCode}':
+    get:
+      summary: Verify Certificate
+      responses: {}
+      tags:
+        - Certificates
+    parameters:
+      - name: verificationCode
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{verificationCode}}'
+  '/api/v1/certificates/{certificateId}':
+    get:
+      summary: Get Certificate
+      responses: {}
+      tags:
+        - Certificates
+    parameters:
+      - name: certificateId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{certificateId}}'
+  '/api/v1/certificates/{certificateId}/download':
+    get:
+      summary: Download Certificate
+      responses: {}
+      tags:
+        - Certificates
+    parameters:
+      - name: certificateId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{certificateId}}'
+  /api/v1/courses:
+    get:
+      summary: Get All Courses
+      responses: {}
+      tags:
+        - Courses
+  /api/v1/courses/featured:
+    get:
+      summary: Get Featured Courses
+      responses: {}
+      tags:
+        - Courses
+  /api/v1/courses/trending:
+    get:
+      summary: Get Trending Courses
+      responses: {}
+      tags:
+        - Courses
+  '/api/v1/courses/{courseId}':
+    get:
+      summary: Get Course
+      responses: {}
+      tags:
+        - Courses
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  /api/v1/courses/my-courses:
+    post:
+      summary: Create Course
+      responses: {}
+      tags:
+        - Courses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                category:
+                  type: string
+            example:
+              title: My Course
+              description: Course description
+              price: 29.99
+              category: ''
+    get:
+      summary: Get My Courses (Instructor)
+      responses: {}
+      tags:
+        - Courses
+  '/api/v1/courses/my-courses/{courseId}':
+    put:
+      summary: Update Course
+      responses: {}
+      tags:
+        - Courses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+    delete:
+      summary: Delete Course
+      responses: {}
+      tags:
+        - Courses
+  '/api/v1/courses/my-courses/{courseId}/submit':
+    post:
+      summary: Submit Course for Review
+      responses: {}
+      tags:
+        - Courses
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  '/api/v1/courses/my-courses/{courseId}/thumbnail':
+    post:
+      summary: Upload Course Thumbnail
+      responses: {}
+      tags:
+        - Courses
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  /api/v1/admin/courses:
+    get:
+      summary: Admin - Get All Courses
+      responses: {}
+      tags:
+        - Courses
+  '/api/v1/admin/courses/{courseId}/approve':
+    post:
+      summary: Admin - Approve Course
+      responses: {}
+      tags:
+        - Courses
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  '/api/v1/admin/courses/{courseId}/reject':
+    post:
+      summary: Admin - Reject Course
+      responses: {}
+      tags:
+        - Courses
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  '/api/v1/admin/courses/{courseId}':
+    delete:
+      summary: Admin - Delete Course
+      responses: {}
+      tags:
+        - Courses
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  '/api/v1/courses/{courseId}/sections':
+    get:
+      summary: Get Sections
+      responses: {}
+      tags:
+        - Curriculum
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  '/api/v1/instructor/courses/{courseId}/sections':
+    post:
+      summary: Add Section
+      responses: {}
+      tags:
+        - Curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+            example:
+              title: Section 1
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  '/api/v1/instructor/courses/{courseId}/sections/{sectionId}':
+    put:
+      summary: Update Section
+      responses: {}
+      tags:
+        - Curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+      - name: sectionId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{sectionId}}'
+    delete:
+      summary: Delete Section
+      responses: {}
+      tags:
+        - Curriculum
+  '/api/v1/instructor/courses/{courseId}/sections/reorder':
+    put:
+      summary: Reorder Sections
+      responses: {}
+      tags:
+        - Curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  '/api/v1/instructor/sections/{sectionId}/lectures':
+    post:
+      summary: Create Lecture
+      responses: {}
+      tags:
+        - Curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                type:
+                  type: string
+            example:
+              title: Lecture 1
+              type: video
+    parameters:
+      - name: sectionId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{sectionId}}'
+  '/api/v1/sections/{sectionId}/lectures/{lectureId}':
+    get:
+      summary: Get Lecture
+      responses: {}
+      tags:
+        - Curriculum
+    parameters:
+      - name: sectionId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{sectionId}}'
+      - name: lectureId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{lectureId}}'
+  '/api/v1/instructor/sections/{sectionId}/lectures/{lectureId}':
+    put:
+      summary: Update Lecture
+      responses: {}
+      tags:
+        - Curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: sectionId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{sectionId}}'
+      - name: lectureId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{lectureId}}'
+    delete:
+      summary: Delete Lecture
+      responses: {}
+      tags:
+        - Curriculum
+  '/api/v1/instructor/sections/{sectionId}/lectures/reorder':
+    put:
+      summary: Reorder Lectures
+      responses: {}
+      tags:
+        - Curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: sectionId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{sectionId}}'
+  '/api/v1/instructor/lectures/{lectureId}/video':
+    post:
+      summary: Upload Lecture Video
+      responses: {}
+      tags:
+        - Curriculum
+    parameters:
+      - name: lectureId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{lectureId}}'
+  '/api/v1/instructor/lectures/{lectureId}/video/status':
+    get:
+      summary: Get Video Upload Status
+      responses: {}
+      tags:
+        - Curriculum
+    parameters:
+      - name: lectureId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{lectureId}}'
+  '/api/v1/instructor/lectures/{lectureId}/attachment':
+    post:
+      summary: Upload Attachment
+      responses: {}
+      tags:
+        - Curriculum
+    parameters:
+      - name: lectureId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{lectureId}}'
+  '/api/v1/instructor/lectures/{lectureId}/attachment/{attachmentId}':
+    delete:
+      summary: Delete Attachment
+      responses: {}
+      tags:
+        - Curriculum
+    parameters:
+      - name: lectureId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{lectureId}}'
+      - name: attachmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{attachmentId}}'
+  '/api/v1/discussions/courses/{courseId}/discussions':
+    get:
+      summary: Get Threads
+      responses: {}
+      tags:
+        - Discussions
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+    post:
+      summary: Create Thread
+      responses: {}
+      tags:
+        - Discussions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                body:
+                  type: string
+            example:
+              title: Discussion topic
+              body: Let's discuss...
+  '/api/v1/discussions/discussions/{threadId}':
+    get:
+      summary: Get Thread
+      responses: {}
+      tags:
+        - Discussions
+    parameters:
+      - name: threadId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{threadId}}'
+    delete:
+      summary: Delete Thread
+      responses: {}
+      tags:
+        - Discussions
+  '/api/v1/discussions/courses/{courseId}/discussions/search':
+    get:
+      summary: Search Threads
+      responses: {}
+      tags:
+        - Discussions
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  '/api/v1/discussions/discussions/{threadId}/replies':
+    post:
+      summary: Create Reply
+      responses: {}
+      tags:
+        - Discussions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+            example:
+              body: My reply...
+    parameters:
+      - name: threadId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{threadId}}'
+    get:
+      summary: Get Replies
+      responses: {}
+      tags:
+        - Discussions
+  '/api/v1/discussions/replies/{replyId}/vote':
+    post:
+      summary: Vote on Reply
+      responses: {}
+      tags:
+        - Discussions
+    parameters:
+      - name: replyId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{replyId}}'
+  '/api/v1/discussions/discussions/{threadId}/pin':
+    patch:
+      summary: Pin Thread
+      responses: {}
+      tags:
+        - Discussions
+    parameters:
+      - name: threadId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{threadId}}'
+  '/api/v1/discussions/discussions/{threadId}/resolve':
+    patch:
+      summary: Resolve Thread
+      responses: {}
+      tags:
+        - Discussions
+    parameters:
+      - name: threadId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{threadId}}'
+  '/api/v1/discussions/replies/{replyId}/answer/{threadId}':
+    patch:
+      summary: Mark Reply as Answer
+      responses: {}
+      tags:
+        - Discussions
+    parameters:
+      - name: replyId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{replyId}}'
+      - name: threadId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{threadId}}'
+  /api/v1/enrollments:
+    post:
+      summary: Enroll in Course
+      responses: {}
+      tags:
+        - Enrollment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                courseId:
+                  type: string
+            example:
+              courseId: ''
+  /api/v1/enrollments/me:
+    get:
+      summary: Get My Enrollments
+      responses: {}
+      tags:
+        - Enrollment
+  '/api/v1/enrollments/me/{courseId}':
+    get:
+      summary: Check Enrollment
+      responses: {}
+      tags:
+        - Enrollment
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  '/api/v1/enrollments/instructor/courses/{courseId}/students':
+    get:
+      summary: Get Course Students
+      responses: {}
+      tags:
+        - Enrollment
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  '/api/v1/enrollments/progress/{courseId}':
+    get:
+      summary: Get Course Progress
+      responses: {}
+      tags:
+        - Enrollment
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  '/api/v1/enrollments/progress/{courseId}/lectures/{lectureId}/complete':
+    post:
+      summary: Mark Lecture Complete
+      responses: {}
+      tags:
+        - Enrollment
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+      - name: lectureId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{lectureId}}'
+    delete:
+      summary: Unmark Lecture Complete
+      responses: {}
+      tags:
+        - Enrollment
+  '/api/v1/enrollments/progress/{courseId}/lectures/{lectureId}/position':
+    put:
+      summary: Save Video Position
+      responses: {}
+      tags:
+        - Enrollment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                positionSeconds:
+                  type: integer
+            example:
+              positionSeconds: 120
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+      - name: lectureId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{lectureId}}'
+  '/api/v1/enrollments/progress/{courseId}/certificate/eligibility':
+    get:
+      summary: Check Certificate Eligibility
+      responses: {}
+      tags:
+        - Enrollment
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  /api/v1/gamification/achievements:
+    get:
+      summary: Get All Achievements
+      responses: {}
+      tags:
+        - Gamification
+    post:
+      summary: Admin - Create Achievement
+      responses: {}
+      tags:
+        - Gamification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+  /api/v1/gamification/achievements/trending:
+    get:
+      summary: Get Trending Achievements
+      responses: {}
+      tags:
+        - Gamification
+  '/api/v1/gamification/achievements/{achievementId}':
+    get:
+      summary: Get Achievement Details
+      responses: {}
+      tags:
+        - Gamification
+    parameters:
+      - name: achievementId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{achievementId}}'
+  /api/v1/gamification/leaderboards/global:
+    get:
+      summary: Global Leaderboard
+      responses: {}
+      tags:
+        - Gamification
+  '/api/v1/gamification/leaderboards/courses/{courseId}':
+    get:
+      summary: Course Leaderboard
+      responses: {}
+      tags:
+        - Gamification
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  /api/v1/gamification/leaderboards/monthly:
+    get:
+      summary: Monthly Leaderboard
+      responses: {}
+      tags:
+        - Gamification
+  /api/v1/gamification/leaderboards/weekly:
+    get:
+      summary: Weekly Leaderboard
+      responses: {}
+      tags:
+        - Gamification
+  /api/v1/gamification/my/achievements:
+    get:
+      summary: My Achievements
+      responses: {}
+      tags:
+        - Gamification
+  /api/v1/gamification/my/leaderboard/position:
+    get:
+      summary: My Leaderboard Position
+      responses: {}
+      tags:
+        - Gamification
+  /api/v1/gamification/my/leaderboard/near:
+    get:
+      summary: Near Me on Leaderboard
+      responses: {}
+      tags:
+        - Gamification
+  /api/v1/gamification/my/stats:
+    get:
+      summary: My Stats
+      responses: {}
+      tags:
+        - Gamification
+  /api/v1/gamification/my/streak:
+    get:
+      summary: My Streak
+      responses: {}
+      tags:
+        - Gamification
+  '/api/v1/gamification/users/{userId}/achievements':
+    get:
+      summary: User Achievements
+      responses: {}
+      tags:
+        - Gamification
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{userId}}'
+  '/api/v1/gamification/users/{userId}/stats':
+    get:
+      summary: User Stats
+      responses: {}
+      tags:
+        - Gamification
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{userId}}'
+  '/api/v1/gamification/users/{userId}/leaderboard':
+    get:
+      summary: User Leaderboard Position
+      responses: {}
+      tags:
+        - Gamification
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{userId}}'
+  '/api/v1/gamification/users/{userId}/streak':
+    get:
+      summary: User Streak
+      responses: {}
+      tags:
+        - Gamification
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{userId}}'
+  /api/v1/health:
+    get:
+      summary: Health Check
+      responses: {}
+      tags:
+        - Health
+  /api/v1/health/ready:
+    get:
+      summary: Readiness Check
+      responses: {}
+      tags:
+        - Health
+  /api/v1/health/metrics:
+    get:
+      summary: Get Metrics
+      responses: {}
+      tags:
+        - Health
+  /api/v1/media/upload/image:
+    post:
+      summary: Upload Image
+      responses: {}
+      tags:
+        - Media
+  /api/v1/media/upload/video/initiate:
+    post:
+      summary: Initiate Video Upload
+      responses: {}
+      tags:
+        - Media
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: string
+                size:
+                  type: integer
+            example:
+              filename: lecture.mp4
+              size: 104857600
+  '/api/v1/media/upload/video/{uploadId}/part/{partNumber}':
+    put:
+      summary: Upload Video Part
+      responses: {}
+      tags:
+        - Media
+    parameters:
+      - name: uploadId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{uploadId}}'
+      - name: partNumber
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 1
+  '/api/v1/media/upload/video/{uploadId}/complete':
+    post:
+      summary: Complete Video Upload
+      responses: {}
+      tags:
+        - Media
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: uploadId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{uploadId}}'
+  '/api/v1/media/upload/video/{uploadId}/abort':
+    delete:
+      summary: Abort Video Upload
+      responses: {}
+      tags:
+        - Media
+    parameters:
+      - name: uploadId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{uploadId}}'
+  '/api/v1/media/video/{videoId}/stream':
+    get:
+      summary: Get Streaming URL
+      responses: {}
+      tags:
+        - Media
+    parameters:
+      - name: videoId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{videoId}}'
+  '/api/v1/media/video/{videoId}/captions':
+    get:
+      summary: Get Captions
+      responses: {}
+      tags:
+        - Media
+    parameters:
+      - name: videoId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{videoId}}'
+    post:
+      summary: Upload Captions
+      responses: {}
+      tags:
+        - Media
+  /api/v1/notifications:
+    get:
+      summary: Get Notifications
+      responses: {}
+      tags:
+        - Notifications
+  /api/v1/notifications/read-all:
+    put:
+      summary: Mark All as Read
+      responses: {}
+      tags:
+        - Notifications
+  /api/v1/notifications/preferences:
+    get:
+      summary: Get Preferences
+      responses: {}
+      tags:
+        - Notifications
+    put:
+      summary: Update Preferences
+      responses: {}
+      tags:
+        - Notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+  '/api/v1/notifications/{notificationId}/read':
+    put:
+      summary: Mark as Read
+      responses: {}
+      tags:
+        - Notifications
+    parameters:
+      - name: notificationId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{notificationId}}'
+  '/api/v1/notifications/{notificationId}':
+    delete:
+      summary: Delete Notification
+      responses: {}
+      tags:
+        - Notifications
+    parameters:
+      - name: notificationId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{notificationId}}'
+  /api/v1/payments/checkout:
+    post:
+      summary: Create Checkout
+      responses: {}
+      tags:
+        - Payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                courseId:
+                  type: string
+            example:
+              courseId: ''
+  '/api/v1/payments/checkout/{sessionId}':
+    get:
+      summary: Get Checkout Session
+      responses: {}
+      tags:
+        - Payments
+    parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{sessionId}}'
+  /api/v1/payments/webhooks/stripe:
+    post:
+      summary: Stripe Webhook
+      responses: {}
+      tags:
+        - Payments
+  /api/v1/payments/orders:
+    get:
+      summary: Get My Orders
+      responses: {}
+      tags:
+        - Payments
+  '/api/v1/payments/orders/{orderId}':
+    get:
+      summary: Get Order
+      responses: {}
+      tags:
+        - Payments
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{orderId}}'
+  '/api/v1/payments/orders/{orderId}/refund':
+    post:
+      summary: Request Refund
+      responses: {}
+      tags:
+        - Payments
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{orderId}}'
+  '/api/v1/payments/orders/{orderId}/invoice':
+    get:
+      summary: Get Invoice
+      responses: {}
+      tags:
+        - Payments
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{orderId}}'
+  /api/v1/coupons/validate:
+    post:
+      summary: Validate Coupon
+      responses: {}
+      tags:
+        - Payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                courseId:
+                  type: string
+            example:
+              code: SAVE20
+              courseId: ''
+  /api/v1/admin/coupons:
+    post:
+      summary: Admin - Create Coupon
+      responses: {}
+      tags:
+        - Payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    get:
+      summary: Admin - Get Coupons
+      responses: {}
+      tags:
+        - Payments
+  '/api/v1/admin/coupons/{couponId}':
+    put:
+      summary: Admin - Update Coupon
+      responses: {}
+      tags:
+        - Payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: couponId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{couponId}}'
+    delete:
+      summary: Admin - Delete Coupon
+      responses: {}
+      tags:
+        - Payments
+    parameters:
+      - name: couponId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{couponId}}'
+  /api/v1/instructor/earnings:
+    get:
+      summary: Get Instructor Earnings
+      responses: {}
+      tags:
+        - Payments
+  /api/v1/instructor/earnings/history:
+    get:
+      summary: Get Earnings History
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+          example: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: 20
+      responses: {}
+      tags:
+        - Payments
+  /api/v1/instructor/payouts/request:
+    post:
+      summary: Request Payout
+      responses: {}
+      tags:
+        - Payments
+  /api/v1/instructor/payouts:
+    get:
+      summary: Get Payouts
+      responses: {}
+      tags:
+        - Payments
+  '/api/v1/admin/payouts/{payoutId}/approve':
+    post:
+      summary: Admin - Approve Payout
+      responses: {}
+      tags:
+        - Payments
+    parameters:
+      - name: payoutId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{payoutId}}'
+  '/api/v1/admin/payouts/{payoutId}/reject':
+    post:
+      summary: Admin - Reject Payout
+      responses: {}
+      tags:
+        - Payments
+    parameters:
+      - name: payoutId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{payoutId}}'
+  /api/v1/personalization/learning-paths:
+    get:
+      summary: Discover Learning Paths
+      responses: {}
+      tags:
+        - Personalization
+    post:
+      summary: Create Learning Path
+      responses: {}
+      tags:
+        - Personalization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+  '/api/v1/personalization/learning-paths/{pathId}':
+    get:
+      summary: Get Learning Path
+      responses: {}
+      tags:
+        - Personalization
+    parameters:
+      - name: pathId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{pathId}}'
+  /api/v1/personalization/recommendations:
+    get:
+      summary: Get Recommendations
+      responses: {}
+      tags:
+        - Personalization
+  '/api/v1/personalization/recommendations/track/{courseId}':
+    post:
+      summary: Track Recommendation Engagement
+      responses: {}
+      tags:
+        - Personalization
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+  /api/v1/personalization/recommendations/path:
+    get:
+      summary: Get Learning Path Recommendations
+      responses: {}
+      tags:
+        - Personalization
+  /api/v1/personalization/analytics:
+    get:
+      summary: Get User Analytics
+      responses: {}
+      tags:
+        - Personalization
+  /api/v1/personalization/analytics/recalculate:
+    post:
+      summary: Recalculate Analytics
+      responses: {}
+      tags:
+        - Personalization
+  /api/v1/personalization/analytics/insights:
+    get:
+      summary: Get Learning Insights
+      responses: {}
+      tags:
+        - Personalization
+  /api/v1/personalization/my/learning-paths:
+    get:
+      summary: My Learning Paths
+      responses: {}
+      tags:
+        - Personalization
+  '/api/v1/personalization/learning-paths/{pathId}/enroll':
+    post:
+      summary: Enroll in Learning Path
+      responses: {}
+      tags:
+        - Personalization
+    parameters:
+      - name: pathId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{pathId}}'
+  '/api/v1/personalization/learning-paths/{pathId}/progress':
+    patch:
+      summary: Update Path Progress
+      responses: {}
+      tags:
+        - Personalization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: pathId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{pathId}}'
+  '/api/v1/personalization/analytics/{userId}':
+    get:
+      summary: Get User Analytics (Public)
+      responses: {}
+      tags:
+        - Personalization
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{userId}}'
+  '/api/v1/personalization/cohort/{cohortId}/analytics':
+    get:
+      summary: Get Cohort Analytics
+      responses: {}
+      tags:
+        - Personalization
+    parameters:
+      - name: cohortId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{cohortId}}'
+  /api/v1/personalization/recommendations/generate:
+    post:
+      summary: Admin - Generate Recommendations
+      responses: {}
+      tags:
+        - Personalization
+  '/api/v1/courses/{courseId}/questions':
+    get:
+      summary: Get Course Questions
+      responses: {}
+      tags:
+        - Q&A
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+    post:
+      summary: Post Question
+      responses: {}
+      tags:
+        - Q&A
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                body:
+                  type: string
+            example:
+              title: How does this work?
+              body: I need help understanding...
+  '/api/v1/questions/{questionId}':
+    put:
+      summary: Update Question
+      responses: {}
+      tags:
+        - Q&A
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: questionId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{questionId}}'
+    delete:
+      summary: Delete Question
+      responses: {}
+      tags:
+        - Q&A
+  '/api/v1/questions/{questionId}/answers':
+    post:
+      summary: Post Answer
+      responses: {}
+      tags:
+        - Q&A
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+            example:
+              body: Here is the answer...
+    parameters:
+      - name: questionId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{questionId}}'
+  '/api/v1/questions/{questionId}/answers/{answerId}':
+    put:
+      summary: Update Answer
+      responses: {}
+      tags:
+        - Q&A
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: questionId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{questionId}}'
+      - name: answerId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{answerId}}'
+    delete:
+      summary: Delete Answer
+      responses: {}
+      tags:
+        - Q&A
+  '/api/v1/questions/{questionId}/answers/{answerId}/upvote':
+    post:
+      summary: Upvote Answer
+      responses: {}
+      tags:
+        - Q&A
+    parameters:
+      - name: questionId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{questionId}}'
+      - name: answerId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{answerId}}'
+  '/api/v1/questions/{questionId}/answers/{answerId}/mark-correct':
+    post:
+      summary: Mark Answer Correct
+      responses: {}
+      tags:
+        - Q&A
+    parameters:
+      - name: questionId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{questionId}}'
+      - name: answerId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{answerId}}'
+  '/api/v1/instructor/lectures/{lectureId}/quiz':
+    post:
+      summary: Create Quiz
+      responses: {}
+      tags:
+        - Quizzes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: lectureId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{lectureId}}'
+  '/api/v1/instructor/quizzes/{quizId}':
+    put:
+      summary: Update Quiz
+      responses: {}
+      tags:
+        - Quizzes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: quizId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{quizId}}'
+  '/api/v1/instructor/quizzes/{quizId}/questions':
+    post:
+      summary: Add Questions
+      responses: {}
+      tags:
+        - Quizzes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: quizId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{quizId}}'
+  '/api/v1/instructor/quizzes/{quizId}/questions/{questionId}':
+    put:
+      summary: Update Question
+      responses: {}
+      tags:
+        - Quizzes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: quizId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{quizId}}'
+      - name: questionId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{questionId}}'
+    delete:
+      summary: Delete Question
+      responses: {}
+      tags:
+        - Quizzes
+  '/api/v1/quizzes/{quizId}/attempt':
+    post:
+      summary: Submit Quiz Attempt
+      responses: {}
+      tags:
+        - Quizzes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: quizId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{quizId}}'
+  '/api/v1/quizzes/{quizId}/attempts':
+    get:
+      summary: Get Quiz Attempts
+      responses: {}
+      tags:
+        - Quizzes
+    parameters:
+      - name: quizId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{quizId}}'
+  '/api/v1/quizzes/{quizId}/attempts/{attemptId}':
+    get:
+      summary: Get Attempt Detail
+      responses: {}
+      tags:
+        - Quizzes
+    parameters:
+      - name: quizId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{quizId}}'
+      - name: attemptId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{attemptId}}'
+  '/api/v1/instructor/lectures/{lectureId}/assignment':
+    post:
+      summary: Create Assignment
+      responses: {}
+      tags:
+        - Quizzes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: lectureId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{lectureId}}'
+  '/api/v1/instructor/assignments/{assignmentId}':
+    put:
+      summary: Update Assignment
+      responses: {}
+      tags:
+        - Quizzes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: assignmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{assignmentId}}'
+    delete:
+      summary: Delete Assignment
+      responses: {}
+      tags:
+        - Quizzes
+    parameters:
+      - name: assignmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{assignmentId}}'
+  '/api/v1/assignments/{assignmentId}/submit':
+    post:
+      summary: Submit Assignment
+      responses: {}
+      tags:
+        - Quizzes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: assignmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{assignmentId}}'
+  '/api/v1/instructor/assignments/{assignmentId}/submissions':
+    get:
+      summary: Get Submissions
+      responses: {}
+      tags:
+        - Quizzes
+    parameters:
+      - name: assignmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{assignmentId}}'
+  '/api/v1/instructor/assignments/{assignmentId}/submissions/{submissionId}/grade':
+    put:
+      summary: Grade Submission
+      responses: {}
+      tags:
+        - Quizzes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: assignmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{assignmentId}}'
+      - name: submissionId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{submissionId}}'
+  '/api/v1/courses/{courseId}/reviews':
+    get:
+      summary: Get Course Reviews
+      responses: {}
+      tags:
+        - Reviews
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+    post:
+      summary: Create Review
+      responses: {}
+      tags:
+        - Reviews
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+                comment:
+                  type: string
+            example:
+              rating: 5
+              comment: Great course!
+  '/api/v1/courses/{courseId}/reviews/{reviewId}':
+    put:
+      summary: Update Review
+      responses: {}
+      tags:
+        - Reviews
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+      - name: reviewId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{reviewId}}'
+    delete:
+      summary: Delete Review
+      responses: {}
+      tags:
+        - Reviews
+  '/api/v1/courses/{courseId}/reviews/{reviewId}/helpful':
+    post:
+      summary: Mark Review Helpful
+      responses: {}
+      tags:
+        - Reviews
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+      - name: reviewId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{reviewId}}'
+  '/api/v1/instructor/courses/{courseId}/reviews/{reviewId}/respond':
+    post:
+      summary: Respond to Review
+      responses: {}
+      tags:
+        - Reviews
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                response:
+                  type: string
+            example:
+              response: Thank you!
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+      - name: reviewId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{reviewId}}'
+  '/api/v1/courses/{courseId}/reviews/{reviewId}/report':
+    post:
+      summary: Report Review
+      responses: {}
+      tags:
+        - Reviews
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+            example:
+              reason: Spam
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+      - name: reviewId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{reviewId}}'
+  /api/v1/admin/reviews/reported:
+    get:
+      summary: Admin - Get Reported Reviews
+      responses: {}
+      tags:
+        - Reviews
+  '/api/v1/admin/reviews/{reviewId}':
+    delete:
+      summary: Admin - Delete Review
+      responses: {}
+      tags:
+        - Reviews
+    parameters:
+      - name: reviewId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{reviewId}}'
+  /api/v1/search:
+    get:
+      summary: Search
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+          example: javascript
+      responses: {}
+      tags:
+        - Search
+  /api/v1/search/suggestions:
+    get:
+      summary: Get Suggestions
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+          example: java
+      responses: {}
+      tags:
+        - Search
+  /api/v1/search/filters:
+    get:
+      summary: Get Filters
+      responses: {}
+      tags:
+        - Search
+  /api/v1/users/me:
+    get:
+      summary: Get My Profile
+      responses: {}
+      tags:
+        - Users
+    put:
+      summary: Update My Profile
+      responses: {}
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                bio:
+                  type: string
+                headline:
+                  type: string
+                website:
+                  type: string
+                  format: uri
+            example:
+              name: John Doe
+              bio: A learner
+              headline: Software Engineer
+              website: 'https://example.com'
+    delete:
+      summary: Delete My Account
+      responses: {}
+      tags:
+        - Users
+  /api/v1/users/me/password:
+    put:
+      summary: Change Password
+      responses: {}
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                currentPassword:
+                  type: string
+                newPassword:
+                  type: string
+            example:
+              currentPassword: Password1
+              newPassword: NewPassword1
+  /api/v1/users/me/avatar:
+    post:
+      summary: Upload Avatar
+      responses: {}
+      tags:
+        - Users
+  '/api/v1/users/{userId}/public':
+    get:
+      summary: Get Public Profile
+      responses: {}
+      tags:
+        - Users
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{userId}}'
+  /api/v1/users/admin/users:
+    get:
+      summary: Admin - List Users
+      responses: {}
+      tags:
+        - Users
+  '/api/v1/users/admin/users/{userId}':
+    get:
+      summary: Admin - Get User
+      responses: {}
+      tags:
+        - Users
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{userId}}'
+    put:
+      summary: Admin - Update User
+      responses: {}
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    delete:
+      summary: Admin - Delete User
+      responses: {}
+      tags:
+        - Users
+  '/api/v1/users/admin/users/{userId}/ban':
+    post:
+      summary: Admin - Ban User
+      responses: {}
+      tags:
+        - Users
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{userId}}'
+  '/api/v1/users/admin/users/{userId}/unban':
+    post:
+      summary: Admin - Unban User
+      responses: {}
+      tags:
+        - Users
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{userId}}'
+  /api/v1/wishlist:
+    get:
+      summary: Get Wishlist
+      responses: {}
+      tags:
+        - Wishlist
+    post:
+      summary: Add to Wishlist
+      responses: {}
+      tags:
+        - Wishlist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                courseId:
+                  type: string
+            example:
+              courseId: ''
+  '/api/v1/wishlist/{courseId}':
+    delete:
+      summary: Remove from Wishlist
+      responses: {}
+      tags:
+        - Wishlist
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '{{courseId}}'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+security:
+  - BearerAuth: []
