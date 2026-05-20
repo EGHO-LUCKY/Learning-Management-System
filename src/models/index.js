@@ -6,6 +6,7 @@ const Coupon = require('./Coupon.model');
 const Review = require('./Review.model');
 const Category = require('./Category.model');
 const Tag = require('./Tag.model');
+const Transaction = require('./Transaction.model');
 const Quiz = require('./Quiz.model');
 const QuizAttempt = require('./QuizAttempt.model');
 const Assignment = require('./Assignment.model');
@@ -37,6 +38,7 @@ module.exports = {
   Review,
   Category,
   Tag,
+  Transaction,
   Quiz,
   QuizAttempt,
   Assignment,

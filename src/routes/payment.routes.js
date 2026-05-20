@@ -55,12 +55,24 @@ payRouter.delete('/admin/coupons/:couponId', protect, restrictTo('admin'), payCt
 payRouter.get('/instructor/earnings', protect, restrictTo('instructor', 'admin'), payCtrl.getEarnings);
 payRouter.get('/instructor/earnings/history', protect, restrictTo('instructor', 'admin'), async (req, res, next) => {
   try {
-    const { Order } = require('../models/index');
-    const Course = require('../models/Course.model');
-    const courses = await Course.find({ instructor: req.user._id }).select('_id');
-    const orders = await Order.find({ 'courses.course': { $in: courses.map(c => c._id) }, status: 'completed' })
-      .populate('courses.course', 'title').populate('student', 'name email').sort('-createdAt');
-    res.json({ success: true, data: orders });
+    const { Transaction } = require('../models/index');
+    const { page = 1, limit = 20 } = req.query;
+    
+    const transactions = await Transaction.find({ user: req.user._id })
+      .populate('course', 'title')
+      .populate('order', 'total status')
+      .populate('payout', 'amount status method')
+      .sort('-createdAt')
+      .skip((page - 1) * limit)
+      .limit(+limit);
+
+    const total = await Transaction.countDocuments({ user: req.user._id });
+
+    res.json({ 
+      success: true, 
+      data: transactions,
+      meta: { total, page: +page, limit: +limit, totalPages: Math.ceil(total / limit) }
+    });
   } catch (err) { next(err); }
 });
 payRouter.post('/instructor/payouts/request', protect, restrictTo('instructor', 'admin'), payCtrl.requestPayout);
