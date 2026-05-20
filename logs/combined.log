@@ -82,3 +82,4 @@
 [2026-05-08 14:57:41] [32minfo[39m: Environment: development
 [2026-05-13 09:02:20] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
 [2026-05-13 09:02:31] [33mwarn[39m: ⚠️  MongoDB disconnected
+[2026-05-20 05:55:35] [33mwarn[39m: Swagger docs not loaded (docs/swagger.yaml missing — optional)
