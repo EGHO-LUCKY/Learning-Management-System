@@ -22,7 +22,7 @@ router.post('/discussions/courses/:courseId/discussions', protect, discussionCon
 router.post('/discussions/discussions/:threadId/replies', protect, discussionController.createReply);
 router.post('/discussions/replies/:replyId/vote', protect, discussionController.voteReply);
 router.patch('/discussions/discussions/:threadId/pin', protect, discussionController.pinThread);
-router.patch('/discussions/discussions/:threadId/resolve', protect, discussionController.markAsAnswer);
+router.patch('/discussions/discussions/:threadId/resolve/:replyId', protect, discussionController.markAsAnswer);
 router.patch('/discussions/replies/:replyId/answer/:threadId', protect, discussionController.markAsAnswer);
 router.delete('/discussions/discussions/:threadId', protect, discussionController.deleteThread);
 

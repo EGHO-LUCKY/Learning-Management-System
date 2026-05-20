@@ -1,6 +1,7 @@
 const {
   UserAchievement, Leaderboard,
 } = require('../models/index');
+const Achievement = require('../models/Achievement.model');
 const logger = require('../utils/logger');
 
 /**
@@ -13,17 +14,29 @@ class GamificationService {
    */
   static async addXp(userId, xp, leaderboardType = 'global') {
     try {
-      const leaderboard = await Leaderboard.findOneAndUpdate(
-        { user: userId, leaderboardType },
-        {
-          $inc: { totalXp: xp },
-          lastActivityAt: new Date(),
-        },
-        { upsert: true, new: true }
-      );
+      let leaderboard = await Leaderboard.findOne({ user: userId, leaderboardType });
 
-      // Recalculate rank
-      await this.recalculateLeaderboardRanks(leaderboardType);
+      if (!leaderboard) {
+        leaderboard = new Leaderboard({
+          user: userId,
+          leaderboardType,
+          totalXp: 0,
+          currentStreak: 0,
+          longestStreak: 0,
+        });
+      }
+
+      // Update streak (only for global leaderboard)
+      if (leaderboardType === 'global') {
+        this._updateStreakInternal(leaderboard);
+      }
+
+      leaderboard.totalXp += xp;
+      leaderboard.lastActivityAt = new Date();
+      await leaderboard.save();
+
+      // Enqueue rank recalculation (simulated as background task)
+      this.enqueueRankRecalculation(leaderboardType);
 
       return leaderboard;
     } catch (error) {
@@ -32,18 +45,61 @@ class GamificationService {
   }
 
   /**
+   * Internal helper to update streak on a leaderboard instance
+   */
+  static _updateStreakInternal(leaderboard) {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    const lastActivity = leaderboard.lastActivityAt;
+
+    if (lastActivity && lastActivity.toDateString() === yesterday.toDateString()) {
+      leaderboard.currentStreak += 1;
+      if (leaderboard.currentStreak > leaderboard.longestStreak) {
+        leaderboard.longestStreak = leaderboard.currentStreak;
+      }
+    } else if (!lastActivity || lastActivity.toDateString() !== today.toDateString()) {
+      leaderboard.currentStreak = 1;
+    }
+  }
+
+  /**
+   * Enqueue leaderboard rank recalculation
+   */
+  static enqueueRankRecalculation(leaderboardType) {
+    // In a real app, this would push to a Redis queue or similar.
+    // For now, we'll use a debounce-like mechanism or just a backgrounded call
+    // to simulate non-blocking behavior for the main request.
+    setImmediate(() => {
+      this.recalculateLeaderboardRanks(leaderboardType).catch(err => 
+        logger.error('Background rank recalculation error:', err)
+      );
+    });
+  }
+
+  /**
    * Add points for completing milestones
    */
   static async addPoints(userId, points, _action) {
     try {
-      const leaderboard = await Leaderboard.findOneAndUpdate(
-        { user: userId, leaderboardType: 'global' },
-        {
-          $inc: { totalPoints: points },
-          lastActivityAt: new Date(),
-        },
-        { upsert: true, new: true }
-      );
+      let leaderboard = await Leaderboard.findOne({ user: userId, leaderboardType: 'global' });
+
+      if (!leaderboard) {
+        leaderboard = new Leaderboard({
+          user: userId,
+          leaderboardType: 'global',
+          totalPoints: 0,
+          currentStreak: 0,
+          longestStreak: 0,
+        });
+      }
+
+      this._updateStreakInternal(leaderboard);
+
+      leaderboard.totalPoints = (leaderboard.totalPoints || 0) + points;
+      leaderboard.lastActivityAt = new Date();
+      await leaderboard.save();
 
       return leaderboard;
     } catch (error) {
@@ -94,9 +150,7 @@ class GamificationService {
       });
 
       // Get achievement detail for XP
-      const achievement = await require('../models/Achievement.model').findById(
-        achievementId
-      );
+      const achievement = await Achievement.findById(achievementId);
       if (achievement) {
         await this.addXp(userId, achievement.xpReward);
       }
@@ -113,45 +167,6 @@ class GamificationService {
   static async checkCourseCompletionAchievements(_userId, _courseId) {
     // Logic to check if user completed their first course, etc.
     // Placeholder for extension
-  }
-
-  /**
-   * Update user's daily streak
-   */
-  static async updateDailyStreak(userId) {
-    try {
-      const leaderboard = await Leaderboard.findOne({
-        user: userId,
-        leaderboardType: 'global',
-      });
-
-      if (!leaderboard) return;
-
-      const lastActivity = leaderboard.lastActivityAt;
-      const today = new Date();
-      const yesterday = new Date();
-      yesterday.setDate(today.getDate() - 1);
-
-      if (
-        lastActivity &&
-        lastActivity.toDateString() === yesterday.toDateString()
-      ) {
-        leaderboard.currentStreak += 1;
-        if (leaderboard.currentStreak > leaderboard.longestStreak) {
-          leaderboard.longestStreak = leaderboard.currentStreak;
-        }
-      } else if (
-        !lastActivity ||
-        lastActivity.toDateString() !== today.toDateString()
-      ) {
-        leaderboard.currentStreak = 1;
-      }
-
-      leaderboard.lastActivityAt = today;
-      await leaderboard.save();
-    } catch (error) {
-      logger.error('Error updating daily streak:', error);
-    }
   }
 
   /**
@@ -181,10 +196,6 @@ class GamificationService {
         user: userId,
         leaderboardType: 'global',
       }).lean();
-
-      await UserAchievement.find({ user: userId })
-        .populate('achievement', 'xpReward')
-        .lean();
 
       return {
         totalAchievements: achievements,

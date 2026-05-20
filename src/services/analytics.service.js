@@ -28,7 +28,7 @@ class AnalyticsService {
     try {
       const Enrollment = require('mongoose').model('Enrollment');
       const QuizAttempt = require('mongoose').model('QuizAttempt');
-      const Review = require('mongoose').model('Review');
+      // const Review = require('mongoose').model('Review');
       const Question = require('mongoose').model('Question');
 
       // Progress metrics
@@ -44,7 +44,6 @@ class AnalyticsService {
       ]);
 
       const forumPosts = await Question.countDocuments({ student: userId });
-      await Review.countDocuments({ student: userId });
 
       // Performance metrics
       const certificateCount = enrollments.filter(e => e.certificateIssued).length;

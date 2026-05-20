@@ -121,7 +121,8 @@ exports.updateThread = catchAsync(async (req, res) => {
   if (!thread) throw new AppError('Thread not found', 404);
 
   // Check authorization
-  if (thread.author && thread.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+  const isAuthor = thread.author && thread.author.toString() === req.user._id.toString();
+  if (!isAuthor && req.user.role !== 'admin') {
     throw new AppError('Not authorized to update this thread', 403);
   }
 
@@ -142,8 +143,14 @@ exports.updateReply = catchAsync(async (req, res) => {
   let reply = await ForumReply.findById(replyId);
   if (!reply) throw new AppError('Reply not found', 404);
 
+  // Check ownership validation against threadId
+  if (reply.threadId.toString() !== req.params.threadId) {
+    throw new AppError('Reply does not belong to this thread', 404);
+  }
+
   // Check authorization
-  if (reply.author && reply.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+  const isAuthor = reply.author && reply.author.toString() === req.user._id.toString();
+  if (!isAuthor && req.user.role !== 'admin') {
     throw new AppError('Not authorized to update this reply', 403);
   }
 
@@ -163,8 +170,14 @@ exports.deleteReply = catchAsync(async (req, res) => {
   const reply = await ForumReply.findById(replyId);
   if (!reply) throw new AppError('Reply not found', 404);
 
+  // Check ownership validation against threadId
+  if (reply.threadId.toString() !== req.params.threadId) {
+    throw new AppError('Reply does not belong to this thread', 404);
+  }
+
   // Check authorization
-  if (reply.author && reply.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+  const isAuthor = reply.author && reply.author.toString() === req.user._id.toString();
+  if (!isAuthor && req.user.role !== 'admin') {
     throw new AppError('Not authorized to delete this reply', 403);
   }
 
@@ -235,16 +248,36 @@ exports.markAsAnswer = catchAsync(async (req, res) => {
 exports.voteReply = catchAsync(async (req, res) => {
   const { replyId } = req.params;
   const { action = 'upvote' } = req.body; // 'upvote' or 'downvote'
+  const userId = req.user._id;
 
   const reply = await ForumReply.findById(replyId);
   if (!reply) throw new AppError('Reply not found', 404);
 
-  // Using a set of user IDs for upvotes/downvotes if possible, 
-  // but keeping simple increment for now as per current schema, 
-  // OR refactoring schema to use arrays for toggle logic.
-  
-  if (action === 'upvote') reply.upvotes = (reply.upvotes || 0) + 1;
-  else if (action === 'downvote') reply.downvotes = (reply.downvotes || 0) + 1;
+  // Initialize arrays if they don't exist
+  if (!reply.upvoters) reply.upvoters = [];
+  if (!reply.downvoters) reply.downvoters = [];
+
+  const isUpvoted = reply.upvoters.some(id => id.toString() === userId.toString());
+  const isDownvoted = reply.downvoters.some(id => id.toString() === userId.toString());
+
+  if (action === 'upvote') {
+    if (isUpvoted) {
+      reply.upvoters = reply.upvoters.filter(id => id.toString() !== userId.toString());
+    } else {
+      reply.upvoters.push(userId);
+      reply.downvoters = reply.downvoters.filter(id => id.toString() !== userId.toString());
+    }
+  } else if (action === 'downvote') {
+    if (isDownvoted) {
+      reply.downvoters = reply.downvoters.filter(id => id.toString() !== userId.toString());
+    } else {
+      reply.downvoters.push(userId);
+      reply.upvoters = reply.upvoters.filter(id => id.toString() !== userId.toString());
+    }
+  }
+
+  reply.upvotes = reply.upvoters.length;
+  reply.downvotes = reply.downvoters.length;
 
   await reply.save();
 
@@ -275,7 +308,8 @@ exports.deleteThread = catchAsync(async (req, res) => {
   if (!thread) throw new AppError('Thread not found', 404);
 
   // Check authorization
-  if (thread.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+  const isAuthor = thread.author && thread.author.toString() === req.user._id.toString();
+  if (!isAuthor && req.user.role !== 'admin') {
     throw new AppError('Not authorized to delete this thread', 403);
   }
 
