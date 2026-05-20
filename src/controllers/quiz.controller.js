@@ -1,8 +1,7 @@
-const { Quiz, QuizAttempt, Assignment, Submission, Lecture } = require('../models/index');
+const { Quiz, QuizAttempt, Lecture } = require('../models/index');
 const Course = require('../models/Course.model');
 const { AppError } = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
-const cloudinaryService = require('../services/cloudinary.service');
 
 // ─── QUIZZES ──────────────────────────────────────────────────────────────────
 

@@ -1,6 +1,6 @@
 const Course = require('../models/Course.model');
 const User = require('../models/User.model');
-const { Enrollment, Order, Review, Payout } = require('../models/index');
+const { Enrollment, Order, Review } = require('../models/index');
 const catchAsync = require('../utils/catchAsync');
 
 // ─── INSTRUCTOR ANALYTICS ─────────────────────────────────────────────────────

@@ -3,7 +3,7 @@ const router = express.Router();
 const userCtrl = require('../controllers/user.controller');
 const { protect, restrictTo } = require('../middlewares/auth.middleware');
 const { uploadAvatar } = require('../middlewares/upload.middleware');
-const { body, param } = require('express-validator');
+const { body } = require('express-validator');
 const validate = require('../middlewares/validate.middleware');
 
 // ─── Own Profile ──────────────────────────────────────────────────────────────

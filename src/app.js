@@ -70,7 +70,6 @@ const certificateRoutes  = require('./routes/certificate.routes');
 const wishlistRoutes     = require('./routes/wishlist.routes');
 const cartRoutes         = require('./routes/cart.routes');
 const notificationRoutes = require('./routes/notification.routes');
-const qaRoutes           = require('./routes/qa.routes');
 const analyticsRoutes    = require('./routes/analytics.routes');
 const mediaRoutes        = require('./routes/media.routes');
 const healthRoutes       = require('./routes/health.routes');
@@ -137,69 +136,38 @@ try {
 // ─── API Routes — /api/v1 ─────────────────────────────────────────────────────
 const API = '/api/v1';
 
-// Auth (rate limited)
+// Group 1: Core & Auth
 app.use(`${API}/auth`, authLimiter, authRoutes);
-
-// Users
 app.use(`${API}/users`, userRoutes);
+app.use(`${API}/health`, healthRoutes);
 
-// Health Checks (must be before courses to avoid :courseId pattern catch)
-app.use(API, healthRoutes);
-
-// Courses (public endpoints rate limited) - must be under /courses prefix
+// Group 2: Course & Content
 app.use(`${API}/courses`, publicLimiter, courseRoutes);
+app.use(API, curriculumRoutes); // Handles /instructor/courses and /sections paths
+app.use(`${API}/search`, publicLimiter, searchRoutes);
+app.use(`${API}/categories`, publicLimiter, categoryRoutes);
 
-// Curriculum (sections + lectures) — covers /instructor/* and /sections/* paths
-app.use(API, curriculumRoutes);
-
-// Enrollment + Progress
+// Group 3: Student Experience
 app.use(`${API}/enrollments`, enrollmentRoutes);
 app.use(`${API}/progress`, enrollmentRoutes);
-
-// Payments + Coupons + Payouts
-app.use(API, paymentRoutes);
-
-// Reviews
-app.use(API, reviewRoutes);
-
-// Categories + Tags
-app.use(API, publicLimiter, categoryRoutes);
-
-// Search
-app.use(`${API}/search`, publicLimiter, searchRoutes);
-
-// Quizzes + Assignments
-app.use(API, quizRoutes);
-
-// Certificates
+app.use(`${API}/payments`, paymentRoutes);
+app.use(`${API}/reviews`, reviewRoutes);
 app.use(`${API}/certificates`, certificateRoutes);
-
-// Wishlist
 app.use(`${API}/wishlist`, wishlistRoutes);
-
-// Cart
 app.use(`${API}/cart`, cartRoutes);
-
-// Notifications
 app.use(`${API}/notifications`, notificationRoutes);
 
-// Q&A / Discussion
-app.use(API, qaRoutes);
-app.use(`${API}/discussions`, discussionRoutes);
+// Group 4: Interaction (Q&A / Discussion)
+app.use(API, discussionRoutes);
 
-// ─── Gamification (Achievements, Leaderboards, Streaks) ──────────────────────
+// Group 5: Assessment & Gamification
+app.use(API, quizRoutes); // /instructor/quizzes and /quizzes
 app.use(`${API}/gamification`, gamificationRoutes);
 
-// ─── Personalization (Recommendations, Learning Paths, Advanced Analytics) ───
+// Group 6: Advanced Features
 app.use(`${API}/personalization`, personalizationRoutes);
-
-// Analytics
-app.use(API, analyticsRoutes);
-
-// Media / File Management
+app.use(`${API}/analytics`, analyticsRoutes);
 app.use(`${API}/media`, mediaRoutes);
-
-// Admin Settings & Audit
 app.use(`${API}/admin`, adminRoutes);
 
 // ─── 404 + Error Handler ──────────────────────────────────────────────────────

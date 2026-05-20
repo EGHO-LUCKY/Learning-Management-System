@@ -130,7 +130,7 @@ exports.stripeWebhook = catchAsync(async (req, res) => {
   switch (event.type) {
     case 'checkout.session.completed': {
       const session = event.data.object;
-      const { userId, courseId, couponId, discount } = session.metadata;
+      const { userId, courseId, couponId } = session.metadata;
 
       const order = await Order.findOneAndUpdate(
         { stripeSessionId: session.id },
@@ -182,6 +182,38 @@ exports.stripeWebhook = catchAsync(async (req, res) => {
   }
 
   res.json({ received: true });
+});
+
+// ─── Get Checkout Session Status ──────────────────────────────────────────────
+exports.getCheckoutSession = catchAsync(async (req, res) => {
+  const { sessionId } = req.params;
+  if (!sessionId || !sessionId.startsWith('cs_')) {
+    throw new AppError('Invalid session ID', 400);
+  }
+
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    res.json({
+      success: true,
+      data: {
+        status: session.payment_status,
+        sessionId: session.id,
+        customerEmail: session.customer_email,
+      },
+    });
+  } catch (error) {
+    throw new AppError('Checkout session not found', 404);
+  }
+});
+
+// ─── Get Single Order ─────────────────────────────────────────────────────────
+exports.getOrderById = catchAsync(async (req, res) => {
+  const order = await Order.findOne({ _id: req.params.orderId, student: req.user._id })
+    .populate('courses.course', 'title thumbnail slug');
+
+  if (!order) throw new AppError('Order not found', 404);
+
+  res.json({ success: true, data: order });
 });
 
 // ─── Order History ────────────────────────────────────────────────────────────
