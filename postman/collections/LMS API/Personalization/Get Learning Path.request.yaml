@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Learning Path'
+method: GET
+url: '{{baseUrl}}/api/v1/personalization/learning-paths/:pathId'
+order: 2000
+pathVariables:
+  - key: pathId
+    value: '{{pathId}}'

@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Admin - List Users'
+method: GET
+url: '{{baseUrl}}/api/v1/users/admin/users'
+order: 7000

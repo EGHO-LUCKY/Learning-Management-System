@@ -1,0 +1,19 @@
+$kind: http-request
+name: 'Report Review'
+method: POST
+url: '{{baseUrl}}/api/v1/courses/:courseId/reviews/:reviewId/report'
+order: 7000
+headers:
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: courseId
+    value: '{{courseId}}'
+  - key: reviewId
+    value: '{{reviewId}}'
+body:
+  type: json
+  content: |-
+    {
+      "reason": "Spam"
+    }

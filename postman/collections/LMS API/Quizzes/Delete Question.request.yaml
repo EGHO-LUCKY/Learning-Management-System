@@ -1,0 +1,10 @@
+$kind: http-request
+name: 'Delete Question'
+method: DELETE
+url: '{{baseUrl}}/api/v1/instructor/quizzes/:quizId/questions/:questionId'
+order: 5000
+pathVariables:
+  - key: quizId
+    value: '{{quizId}}'
+  - key: questionId
+    value: '{{questionId}}'

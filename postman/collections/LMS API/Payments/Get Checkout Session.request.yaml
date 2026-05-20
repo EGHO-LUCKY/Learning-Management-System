@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Checkout Session'
+method: GET
+url: '{{baseUrl}}/api/v1/payments/checkout/:sessionId'
+order: 2000
+pathVariables:
+  - key: sessionId
+    value: '{{sessionId}}'

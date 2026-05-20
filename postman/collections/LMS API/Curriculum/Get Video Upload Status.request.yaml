@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Video Upload Status'
+method: GET
+url: '{{baseUrl}}/api/v1/instructor/lectures/:lectureId/video/status'
+order: 12000
+pathVariables:
+  - key: lectureId
+    value: '{{lectureId}}'

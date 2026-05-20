@@ -1,0 +1,18 @@
+$kind: http-request
+name: 'Create Thread'
+method: POST
+url: '{{baseUrl}}/api/v1/discussions/courses/:courseId/discussions'
+order: 4000
+headers:
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: courseId
+    value: '{{courseId}}'
+body:
+  type: json
+  content: |-
+    {
+      "title": "Discussion topic",
+      "body": "Let's discuss..."
+    }

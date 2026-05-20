@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Threads'
+method: GET
+url: '{{baseUrl}}/api/v1/discussions/courses/:courseId/discussions'
+order: 1000
+pathVariables:
+  - key: courseId
+    value: '{{courseId}}'

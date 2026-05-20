@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Admin - Get Coupons'
+method: GET
+url: '{{baseUrl}}/api/v1/admin/coupons'
+order: 10000

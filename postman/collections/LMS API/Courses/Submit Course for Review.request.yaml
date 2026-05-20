@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Submit Course for Review'
+method: POST
+url: '{{baseUrl}}/api/v1/courses/my-courses/:courseId/submit'
+order: 9000
+pathVariables:
+  - key: courseId
+    value: '{{courseId}}'

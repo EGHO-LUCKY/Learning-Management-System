@@ -1,0 +1,10 @@
+$kind: http-request
+name: 'Mark Lecture Complete'
+method: POST
+url: '{{baseUrl}}/api/v1/enrollments/progress/:courseId/lectures/:lectureId/complete'
+order: 6000
+pathVariables:
+  - key: courseId
+    value: '{{courseId}}'
+  - key: lectureId
+    value: '{{lectureId}}'

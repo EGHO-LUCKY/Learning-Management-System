@@ -1,0 +1,17 @@
+$kind: http-request
+name: 'Add Section'
+method: POST
+url: '{{baseUrl}}/api/v1/instructor/courses/:courseId/sections'
+order: 2000
+headers:
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: courseId
+    value: '{{courseId}}'
+body:
+  type: json
+  content: |-
+    {
+      "title": "Section 1"
+    }

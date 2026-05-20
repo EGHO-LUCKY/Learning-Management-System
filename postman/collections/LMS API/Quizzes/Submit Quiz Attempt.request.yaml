@@ -1,0 +1,15 @@
+$kind: http-request
+name: 'Submit Quiz Attempt'
+method: POST
+url: '{{baseUrl}}/api/v1/quizzes/:quizId/attempt'
+order: 6000
+headers:
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: quizId
+    value: '{{quizId}}'
+body:
+  type: json
+  content: |-
+    {}

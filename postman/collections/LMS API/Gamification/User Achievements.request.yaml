@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'User Achievements'
+method: GET
+url: '{{baseUrl}}/api/v1/gamification/users/:userId/achievements'
+order: 13000
+pathVariables:
+  - key: userId
+    value: '{{userId}}'

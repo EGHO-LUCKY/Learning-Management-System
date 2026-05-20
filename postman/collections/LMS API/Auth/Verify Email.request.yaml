@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Verify Email'
+method: POST
+url: '{{baseUrl}}/api/v1/auth/verify-email/:token'
+order: 7000
+pathVariables:
+  - key: token
+    value: '{{verifyToken}}'

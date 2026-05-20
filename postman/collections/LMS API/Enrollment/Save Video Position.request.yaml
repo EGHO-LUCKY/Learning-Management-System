@@ -1,0 +1,19 @@
+$kind: http-request
+name: 'Save Video Position'
+method: PUT
+url: '{{baseUrl}}/api/v1/enrollments/progress/:courseId/lectures/:lectureId/position'
+order: 8000
+headers:
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: courseId
+    value: '{{courseId}}'
+  - key: lectureId
+    value: '{{lectureId}}'
+body:
+  type: json
+  content: |-
+    {
+      "positionSeconds": 120
+    }

@@ -1,0 +1,15 @@
+$kind: http-request
+name: 'Create Quiz'
+method: POST
+url: '{{baseUrl}}/api/v1/instructor/lectures/:lectureId/quiz'
+order: 1000
+headers:
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: lectureId
+    value: '{{lectureId}}'
+body:
+  type: json
+  content: |-
+    {}

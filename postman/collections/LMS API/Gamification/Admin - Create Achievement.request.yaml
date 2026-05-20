@@ -1,0 +1,12 @@
+$kind: http-request
+name: 'Admin - Create Achievement'
+method: POST
+url: '{{baseUrl}}/api/v1/gamification/achievements'
+order: 17000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {}

@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Check Certificate Eligibility'
+method: GET
+url: '{{baseUrl}}/api/v1/enrollments/progress/:courseId/certificate/eligibility'
+order: 9000
+pathVariables:
+  - key: courseId
+    value: '{{courseId}}'

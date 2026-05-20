@@ -1,0 +1,15 @@
+$kind: http-request
+name: 'Update Quiz'
+method: PUT
+url: '{{baseUrl}}/api/v1/instructor/quizzes/:quizId'
+order: 2000
+headers:
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: quizId
+    value: '{{quizId}}'
+body:
+  type: json
+  content: |-
+    {}

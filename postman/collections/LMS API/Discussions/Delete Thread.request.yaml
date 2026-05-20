@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Delete Thread'
+method: DELETE
+url: '{{baseUrl}}/api/v1/discussions/discussions/:threadId'
+order: 10000
+pathVariables:
+  - key: threadId
+    value: '{{threadId}}'

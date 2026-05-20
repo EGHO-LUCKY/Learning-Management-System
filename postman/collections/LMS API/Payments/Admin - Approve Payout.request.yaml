@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Admin - Approve Payout'
+method: POST
+url: '{{baseUrl}}/api/v1/admin/payouts/:payoutId/approve'
+order: 15000
+pathVariables:
+  - key: payoutId
+    value: '{{payoutId}}'

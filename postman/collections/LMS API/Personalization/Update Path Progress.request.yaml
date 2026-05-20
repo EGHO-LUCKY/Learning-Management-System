@@ -1,0 +1,15 @@
+$kind: http-request
+name: 'Update Path Progress'
+method: PATCH
+url: '{{baseUrl}}/api/v1/personalization/learning-paths/:pathId/progress'
+order: 12000
+headers:
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: pathId
+    value: '{{pathId}}'
+body:
+  type: json
+  content: |-
+    {}

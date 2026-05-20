@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Track Recommendation Engagement'
+method: POST
+url: '{{baseUrl}}/api/v1/personalization/recommendations/track/:courseId'
+order: 4000
+pathVariables:
+  - key: courseId
+    value: '{{courseId}}'

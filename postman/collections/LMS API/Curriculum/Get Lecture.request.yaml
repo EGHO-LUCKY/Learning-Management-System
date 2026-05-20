@@ -1,0 +1,10 @@
+$kind: http-request
+name: 'Get Lecture'
+method: GET
+url: '{{baseUrl}}/api/v1/sections/:sectionId/lectures/:lectureId'
+order: 7000
+pathVariables:
+  - key: sectionId
+    value: '{{sectionId}}'
+  - key: lectureId
+    value: '{{lectureId}}'

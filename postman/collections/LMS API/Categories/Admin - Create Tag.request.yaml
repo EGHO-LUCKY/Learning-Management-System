@@ -1,0 +1,14 @@
+$kind: http-request
+name: 'Admin - Create Tag'
+method: POST
+url: '{{baseUrl}}/api/v1/admin/tags'
+order: 7000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "javascript"
+    }

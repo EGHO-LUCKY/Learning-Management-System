@@ -1,0 +1,16 @@
+$kind: http-request
+method: POST
+url: '{{baseUrl}}/api/v1/courses/my-courses'
+order: 5000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "My Course",
+      "description": "Course description",
+      "price": 29.99,
+      "category": "{{categoryId}}"
+    }

@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Admin - Reject Course'
+method: POST
+url: '{{baseUrl}}/api/v1/courses/admin/:courseId/reject'
+order: 13000
+pathVariables:
+  - key: courseId
+    value: '{{courseId}}'

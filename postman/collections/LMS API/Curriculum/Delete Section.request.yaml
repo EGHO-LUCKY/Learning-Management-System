@@ -1,0 +1,10 @@
+$kind: http-request
+name: 'Delete Section'
+method: DELETE
+url: '{{baseUrl}}/api/v1/instructor/courses/:courseId/sections/:sectionId'
+order: 4000
+pathVariables:
+  - key: courseId
+    value: '{{courseId}}'
+  - key: sectionId
+    value: '{{sectionId}}'

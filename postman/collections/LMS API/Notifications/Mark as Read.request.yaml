@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Mark as Read'
+method: PUT
+url: '{{baseUrl}}/api/v1/notifications/:notificationId/read'
+order: 5000
+pathVariables:
+  - key: notificationId
+    value: '{{notificationId}}'

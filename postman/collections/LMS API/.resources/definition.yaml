@@ -1,0 +1,19 @@
+$kind: collection
+name: LMS API
+description: 'Complete API collection for the Learning Management System backend. Covers authentication, courses, enrollment, payments, gamification, and more.'
+variables:
+  - key: baseUrl
+    value: 'http://localhost:5000'
+  - key: accessToken
+    value: ''
+  - key: refreshToken
+    value: ''
+  - key: courseId
+    value: ''
+  - key: categoryId
+    value: ''
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{accessToken}}'

@@ -1,0 +1,10 @@
+$kind: http-request
+name: 'Delete Attachment'
+method: DELETE
+url: '{{baseUrl}}/api/v1/instructor/lectures/:lectureId/attachment/:attachmentId'
+order: 14000
+pathVariables:
+  - key: lectureId
+    value: '{{lectureId}}'
+  - key: attachmentId
+    value: '{{attachmentId}}'

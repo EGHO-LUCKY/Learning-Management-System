@@ -1,0 +1,14 @@
+$kind: http-request
+name: 'Upload Lecture Video'
+method: POST
+url: '{{baseUrl}}/api/v1/instructor/lectures/:lectureId/video'
+order: 11000
+pathVariables:
+  - key: lectureId
+    value: '{{lectureId}}'
+body:
+  type: formdata
+  content:
+    - key: video
+      type: file
+      src: ''

@@ -1,0 +1,10 @@
+$kind: http-request
+name: 'Unmark Lecture Complete'
+method: DELETE
+url: '{{baseUrl}}/api/v1/enrollments/progress/:courseId/lectures/:lectureId/complete'
+order: 7000
+pathVariables:
+  - key: courseId
+    value: '{{courseId}}'
+  - key: lectureId
+    value: '{{lectureId}}'

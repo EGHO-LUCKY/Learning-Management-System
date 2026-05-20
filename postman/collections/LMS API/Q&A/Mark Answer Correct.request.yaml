@@ -1,0 +1,10 @@
+$kind: http-request
+name: 'Mark Answer Correct'
+method: POST
+url: '{{baseUrl}}/api/v1/questions/:questionId/answers/:answerId/mark-correct'
+order: 9000
+pathVariables:
+  - key: questionId
+    value: '{{questionId}}'
+  - key: answerId
+    value: '{{answerId}}'

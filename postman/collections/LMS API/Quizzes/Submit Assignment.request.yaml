@@ -1,0 +1,15 @@
+$kind: http-request
+name: 'Submit Assignment'
+method: POST
+url: '{{baseUrl}}/api/v1/assignments/:assignmentId/submit'
+order: 10000
+headers:
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: assignmentId
+    value: '{{assignmentId}}'
+body:
+  type: json
+  content: |-
+    {}

@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Public Profile'
+method: GET
+url: '{{baseUrl}}/api/v1/users/:userId/public'
+order: 6000
+pathVariables:
+  - key: userId
+    value: '{{userId}}'

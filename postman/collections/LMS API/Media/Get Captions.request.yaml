@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Captions'
+method: GET
+url: '{{baseUrl}}/api/v1/media/video/:videoId/captions'
+order: 7000
+pathVariables:
+  - key: videoId
+    value: '{{videoId}}'

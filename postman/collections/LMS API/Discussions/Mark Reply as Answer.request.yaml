@@ -1,0 +1,10 @@
+$kind: http-request
+name: 'Mark Reply as Answer'
+method: PATCH
+url: '{{baseUrl}}/api/v1/discussions/replies/:replyId/answer/:threadId'
+order: 11000
+pathVariables:
+  - key: replyId
+    value: '{{replyId}}'
+  - key: threadId
+    value: '{{threadId}}'

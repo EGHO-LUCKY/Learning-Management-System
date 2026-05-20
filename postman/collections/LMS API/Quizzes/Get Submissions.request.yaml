@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Submissions'
+method: GET
+url: '{{baseUrl}}/api/v1/instructor/assignments/:assignmentId/submissions'
+order: 11000
+pathVariables:
+  - key: assignmentId
+    value: '{{assignmentId}}'

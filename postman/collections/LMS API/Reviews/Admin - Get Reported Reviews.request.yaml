@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Admin - Get Reported Reviews'
+method: GET
+url: '{{baseUrl}}/api/v1/admin/reviews/reported'
+order: 8000

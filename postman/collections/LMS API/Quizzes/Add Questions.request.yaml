@@ -1,0 +1,15 @@
+$kind: http-request
+name: 'Add Questions'
+method: POST
+url: '{{baseUrl}}/api/v1/instructor/quizzes/:quizId/questions'
+order: 3000
+headers:
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: quizId
+    value: '{{quizId}}'
+body:
+  type: json
+  content: |-
+    {}

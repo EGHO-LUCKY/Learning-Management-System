@@ -1,0 +1,15 @@
+$kind: http-request
+name: 'Complete Video Upload'
+method: POST
+url: '{{baseUrl}}/api/v1/media/upload/video/:uploadId/complete'
+order: 4000
+headers:
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: uploadId
+    value: '{{uploadId}}'
+body:
+  type: json
+  content: |-
+    {}

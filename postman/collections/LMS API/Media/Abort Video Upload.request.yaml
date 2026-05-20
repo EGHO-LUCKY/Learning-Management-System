@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Abort Video Upload'
+method: DELETE
+url: '{{baseUrl}}/api/v1/media/upload/video/:uploadId/abort'
+order: 5000
+pathVariables:
+  - key: uploadId
+    value: '{{uploadId}}'

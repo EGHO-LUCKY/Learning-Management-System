@@ -1,0 +1,17 @@
+$kind: http-request
+name: 'Grade Submission'
+method: PUT
+url: '{{baseUrl}}/api/v1/instructor/assignments/:assignmentId/submissions/:submissionId/grade'
+order: 12000
+headers:
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: assignmentId
+    value: '{{assignmentId}}'
+  - key: submissionId
+    value: '{{submissionId}}'
+body:
+  type: json
+  content: |-
+    {}

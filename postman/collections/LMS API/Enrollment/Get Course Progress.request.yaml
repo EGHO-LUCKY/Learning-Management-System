@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Course Progress'
+method: GET
+url: '{{baseUrl}}/api/v1/enrollments/progress/:courseId'
+order: 5000
+pathVariables:
+  - key: courseId
+    value: '{{courseId}}'

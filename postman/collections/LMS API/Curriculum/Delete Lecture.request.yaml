@@ -1,0 +1,10 @@
+$kind: http-request
+name: 'Delete Lecture'
+method: DELETE
+url: '{{baseUrl}}/api/v1/instructor/sections/:sectionId/lectures/:lectureId'
+order: 9000
+pathVariables:
+  - key: sectionId
+    value: '{{sectionId}}'
+  - key: lectureId
+    value: '{{lectureId}}'

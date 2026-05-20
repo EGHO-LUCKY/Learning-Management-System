@@ -1,0 +1,4 @@
+$kind: http-request
+method: PUT
+url: '{{baseUrl}}/api/v1/notifications/read-all'
+order: 2000

@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Course'
+method: GET
+url: '{{baseUrl}}/api/v1/courses/:courseId'
+order: 4000
+pathVariables:
+  - key: courseId
+    value: '{{courseId}}'

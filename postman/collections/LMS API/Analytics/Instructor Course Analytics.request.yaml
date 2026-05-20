@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Instructor Course Analytics'
+method: GET
+url: '{{baseUrl}}/api/v1/instructor/analytics/courses/:courseId'
+order: 4000
+pathVariables:
+  - key: courseId
+    value: '{{courseId}}'

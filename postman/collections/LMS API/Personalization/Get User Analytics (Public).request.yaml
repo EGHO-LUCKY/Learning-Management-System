@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get User Analytics (Public)'
+method: GET
+url: '{{baseUrl}}/api/v1/personalization/analytics/:userId'
+order: 13000
+pathVariables:
+  - key: userId
+    value: '{{userId}}'
