@@ -50,6 +50,8 @@ payRouter.get('/admin/coupons', protect, restrictTo('admin'), async (req, res, n
     res.json({ success: true, data: coupons });
   } catch (err) { next(err); }
 });
+payRouter.put('/admin/coupons/:couponId', protect, restrictTo('admin'), payCtrl.updateCoupon);
+payRouter.delete('/admin/coupons/:couponId', protect, restrictTo('admin'), payCtrl.deleteCoupon);
 payRouter.get('/instructor/earnings', protect, restrictTo('instructor', 'admin'), payCtrl.getEarnings);
 payRouter.get('/instructor/earnings/history', protect, restrictTo('instructor', 'admin'), async (req, res, next) => {
   try {

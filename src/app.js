@@ -75,7 +75,6 @@ const analyticsRoutes    = require('./routes/analytics.routes');
 const mediaRoutes        = require('./routes/media.routes');
 const healthRoutes       = require('./routes/health.routes');
 const adminRoutes        = require('./routes/admin.routes');
-// ─── NEW: Advanced Features ────────────────────────────────────────────────
 const discussionRoutes   = require('./routes/discussion.routes');
 const gamificationRoutes = require('./routes/gamification.routes');
 const personalizationRoutes = require('./routes/personalization.routes');

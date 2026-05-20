@@ -228,6 +228,22 @@ exports.validateCoupon = catchAsync(async (req, res) => {
   });
 });
 
+// ─── Admin: Manage Coupons ───────────────────────────────────────────────────
+exports.updateCoupon = catchAsync(async (req, res) => {
+  const coupon = await Coupon.findByIdAndUpdate(req.params.couponId, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  if (!coupon) throw new AppError('Coupon not found', 404);
+  res.json({ success: true, data: coupon });
+});
+
+exports.deleteCoupon = catchAsync(async (req, res) => {
+  const coupon = await Coupon.findByIdAndDelete(req.params.couponId);
+  if (!coupon) throw new AppError('Coupon not found', 404);
+  res.json({ success: true, message: 'Coupon deleted' });
+});
+
 // ─── Instructor: Earnings Summary ─────────────────────────────────────────────
 exports.getEarnings = catchAsync(async (req, res) => {
   const orders = await Order.find({
