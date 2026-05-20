@@ -14,15 +14,18 @@ exports.initiateVideoUpload = catchAsync(async (req, res) => {
   const { filename, size, mimeType } = req.body;
   if (!filename || !size) throw new AppError('filename and size are required', 400);
 
+  const totalSize = parseInt(size, 10);
+  if (isNaN(totalSize) || totalSize <= 0) throw new AppError('Invalid file size', 400);
+
   const uploadId = `lms_up_${uuidv4()}`;
   const partSize = 6 * 1024 * 1024; // 6MB
-  const numParts = Math.ceil(size / partSize);
+  const numParts = Math.ceil(totalSize / partSize);
 
   await MediaUpload.create({
     uploadId,
     instructor: req.user._id,
     filename,
-    totalSize: size,
+    totalSize,
     mimeType,
     status: 'pending',
     provider: 'cloudinary',
@@ -32,8 +35,11 @@ exports.initiateVideoUpload = catchAsync(async (req, res) => {
 });
 
 exports.uploadVideoPart = catchAsync(async (req, res) => {
-  const { uploadId, partNumber } = req.params;
-  const upload = await MediaUpload.findOne({ uploadId });
+  const { uploadId } = req.params;
+  const partNumber = parseInt(req.params.partNumber, 10);
+  if (isNaN(partNumber) || partNumber <= 0) throw new AppError('Invalid part number', 400);
+
+  const upload = await MediaUpload.findOne({ uploadId, instructor: req.user._id });
   if (!upload) throw new AppError('Upload session not found', 404);
   if (upload.status !== 'pending') throw new AppError(`Cannot upload part to a ${upload.status} session`, 400);
 
@@ -47,20 +53,24 @@ exports.uploadVideoPart = catchAsync(async (req, res) => {
   );
 
   upload.parts.push({
-    partNumber: +partNumber,
+    partNumber,
     etag: result.etag,
     publicId: result.public_id,
   });
   await upload.save();
 
-  res.json({ success: true, data: { uploadId, partNumber: +partNumber, etag: result.etag } });
+  res.json({ success: true, data: { uploadId, partNumber, etag: result.etag } });
 });
 
 exports.completeVideoUpload = catchAsync(async (req, res) => {
   const { uploadId } = req.params;
-  const upload = await MediaUpload.findOne({ uploadId });
+  const upload = await MediaUpload.findOne({ uploadId, instructor: req.user._id });
   if (!upload) throw new AppError('Upload session not found', 404);
   if (upload.status !== 'pending') throw new AppError(`Cannot complete a ${upload.status} session`, 400);
+
+  if (!upload.parts || upload.parts.length === 0) {
+    throw new AppError('Cannot complete upload without any uploaded parts', 400);
+  }
 
   // In production with S3:
   // await s3.completeMultipartUpload({ ... }).promise();
@@ -80,8 +90,12 @@ exports.completeVideoUpload = catchAsync(async (req, res) => {
 
 exports.abortVideoUpload = catchAsync(async (req, res) => {
   const { uploadId } = req.params;
-  const upload = await MediaUpload.findOne({ uploadId });
+  const upload = await MediaUpload.findOne({ uploadId, instructor: req.user._id });
   if (!upload) throw new AppError('Upload session not found', 404);
+
+  if (upload.status !== 'pending') {
+    throw new AppError(`Cannot abort an upload in ${upload.status} state`, 400);
+  }
 
   // 1. Clean up temporary chunks from Cloudinary
   if (upload.parts && upload.parts.length > 0) {

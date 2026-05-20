@@ -4,7 +4,7 @@ import globals from "globals";
 export default [
   js.configs.recommended,
   {
-    files: ["**/*.{js,mjs,cjs}"],
+    files: ["**/*.{js,mjs}"],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -14,6 +14,12 @@ export default [
     },
     rules: {
       "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    },
+  },
+  {
+    files: ["**/*.cjs"],
+    languageOptions: {
+      sourceType: "commonjs",
     },
   },
   {
