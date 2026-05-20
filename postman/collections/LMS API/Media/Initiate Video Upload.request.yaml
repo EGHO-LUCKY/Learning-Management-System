@@ -8,6 +8,7 @@ body:
   content: |-
     {
       "filename": "lecture.mp4",
-      "size": 104857600
+      "size": 104857600,
+      "mimeType": "video/mp4"
     }
 order: 2000

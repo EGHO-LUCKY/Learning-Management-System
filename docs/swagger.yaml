@@ -1357,9 +1357,12 @@ paths:
                   type: string
                 size:
                   type: integer
+                mimeType:
+                  type: string
             example:
               filename: lecture.mp4
               size: 104857600
+              mimeType: video/mp4
   '/api/v1/media/upload/video/{uploadId}/part/{partNumber}':
     put:
       summary: Upload Video Part
@@ -1400,7 +1403,7 @@ paths:
         example: '{{uploadId}}'
   '/api/v1/media/upload/video/{uploadId}/abort':
     delete:
-      summary: Abort Video Upload
+      summary: Abort Video Upload (Cleans up partial chunks)
       responses: {}
       tags:
         - Media
@@ -1637,13 +1640,6 @@ paths:
       responses: {}
       tags:
         - Payments
-    parameters:
-      - name: couponId
-        in: path
-        required: true
-        schema:
-          type: string
-        example: '{{couponId}}'
   /api/v1/instructor/earnings:
     get:
       summary: Get Instructor Earnings
@@ -2175,13 +2171,6 @@ paths:
       responses: {}
       tags:
         - Quizzes
-    parameters:
-      - name: assignmentId
-        in: path
-        required: true
-        schema:
-          type: string
-        example: '{{assignmentId}}'
   '/api/v1/assignments/{assignmentId}/submit':
     post:
       summary: Submit Assignment

@@ -24,6 +24,7 @@ const Leaderboard = require('./Leaderboard.model');
 const DiscussionForum = require('./DiscussionForum.model');
 const ForumReply = require('./ForumReply.model');
 const Mentorship = require('./Mentorship.model');
+const MediaUpload = require('./MediaUpload.model');
 const LiveSession = require('./LiveSession.model');
 const LearningPath = require('./LearningPath.model');
 const Recommendation = require('./Recommendation.model');
@@ -56,6 +57,7 @@ module.exports = {
   DiscussionForum,
   ForumReply,
   Mentorship,
+  MediaUpload,
   LiveSession,
   LearningPath,
   Recommendation,
