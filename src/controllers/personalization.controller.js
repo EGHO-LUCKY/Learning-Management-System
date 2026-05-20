@@ -1,4 +1,4 @@
-const { Recommendation, LearningPath, Analytics } = require('../models/index');
+const { LearningPath } = require('../models/index');
 const { AppError } = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 const RecommendationEngine = require('../services/recommendation.service');

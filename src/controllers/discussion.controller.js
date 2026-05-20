@@ -39,7 +39,7 @@ exports.createThread = catchAsync(async (req, res) => {
 // ─── GET: Get Course Discussions ───────────────────────────────────────────
 exports.getThreads = catchAsync(async (req, res) => {
   const { courseId } = req.params;
-  const { threadType, isResolved, sort, page = 1, limit = 20 } = req.query;
+  const { threadType, isResolved } = req.query;
 
   const query = { course: courseId };
   if (threadType) query.threadType = threadType;

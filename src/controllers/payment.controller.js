@@ -130,7 +130,7 @@ exports.stripeWebhook = catchAsync(async (req, res) => {
   switch (event.type) {
     case 'checkout.session.completed': {
       const session = event.data.object;
-      const { userId, courseId, couponId, discount } = session.metadata;
+      const { userId, courseId, couponId } = session.metadata;
 
       const order = await Order.findOneAndUpdate(
         { stripeSessionId: session.id },

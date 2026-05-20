@@ -1,4 +1,4 @@
-const { Recommendation, Enrollment, Review, Course, User } = require('../models/index');
+const { Recommendation, Enrollment, Course, User } = require('../models/index');
 const logger = require('../utils/logger');
 
 /**

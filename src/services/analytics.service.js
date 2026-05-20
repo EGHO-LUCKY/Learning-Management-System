@@ -44,7 +44,7 @@ class AnalyticsService {
       ]);
 
       const forumPosts = await Question.countDocuments({ student: userId });
-      const reviews = await Review.countDocuments({ student: userId });
+      await Review.countDocuments({ student: userId });
 
       // Performance metrics
       const certificateCount = enrollments.filter(e => e.certificateIssued).length;
@@ -212,12 +212,12 @@ class AnalyticsService {
     return submissions[0]?.avgGrade || 0;
   }
 
-  static async extractSkillsGained(userId) {
+  static async extractSkillsGained(_userId) {
     // In production, map courses to skills
     return [];
   }
 
-  static async identifyPeakHours(userId) {
+  static async identifyPeakHours(_userId) {
     // Would require timestamp data from activity logs
     return ['14:00-16:00', '19:00-21:00']; // Placeholder
   }

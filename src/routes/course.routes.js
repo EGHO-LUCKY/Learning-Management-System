@@ -5,7 +5,7 @@ const express = require('express');
 const courseRouter = express.Router();
 const c = require('../controllers/course.controller');
 const { protect, restrictTo, optionalAuth } = require('../middlewares/auth.middleware');
-const { uploadThumbnail, uploadVideo } = require('../middlewares/upload.middleware');
+const { uploadThumbnail } = require('../middlewares/upload.middleware');
 
 // Public discovery
 courseRouter.get('/', optionalAuth, c.getCourses);
