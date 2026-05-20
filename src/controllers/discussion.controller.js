@@ -112,6 +112,70 @@ exports.createReply = catchAsync(async (req, res) => {
   });
 });
 
+// ─── PUT: Update Thread (Q&A/Discussion) ───────────────────────────────────
+exports.updateThread = catchAsync(async (req, res) => {
+  const { threadId } = req.params;
+  const { title, content, tags } = req.body;
+
+  let thread = await DiscussionForum.findById(threadId);
+  if (!thread) throw new AppError('Thread not found', 404);
+
+  // Check authorization
+  if (thread.author && thread.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    throw new AppError('Not authorized to update this thread', 403);
+  }
+
+  thread = await DiscussionForum.findByIdAndUpdate(
+    threadId,
+    { title, content, tags, lastActivityAt: new Date() },
+    { new: true, runValidators: true }
+  );
+
+  res.json({ success: true, data: thread });
+});
+
+// ─── PUT: Update Reply/Answer ──────────────────────────────────────────────
+exports.updateReply = catchAsync(async (req, res) => {
+  const { replyId } = req.params;
+  const { content } = req.body;
+
+  let reply = await ForumReply.findById(replyId);
+  if (!reply) throw new AppError('Reply not found', 404);
+
+  // Check authorization
+  if (reply.author && reply.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    throw new AppError('Not authorized to update this reply', 403);
+  }
+
+  reply = await ForumReply.findByIdAndUpdate(
+    replyId,
+    { content },
+    { new: true, runValidators: true }
+  ).populate('author', 'name avatar');
+
+  res.json({ success: true, data: reply });
+});
+
+// ─── DELETE: Delete Reply/Answer ───────────────────────────────────────────
+exports.deleteReply = catchAsync(async (req, res) => {
+  const { replyId } = req.params;
+
+  const reply = await ForumReply.findById(replyId);
+  if (!reply) throw new AppError('Reply not found', 404);
+
+  // Check authorization
+  if (reply.author && reply.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    throw new AppError('Not authorized to delete this reply', 403);
+  }
+
+  await ForumReply.findByIdAndDelete(replyId);
+
+  // Decrement thread reply count
+  await DiscussionForum.findByIdAndUpdate(reply.threadId, { $inc: { replyCount: -1 } });
+
+  res.json({ success: true, message: 'Reply deleted successfully' });
+});
+
 // ─── GET: Get Thread Replies ──────────────────────────────────────────────
 exports.getReplies = catchAsync(async (req, res) => {
   const { threadId } = req.params;
@@ -139,10 +203,14 @@ exports.markAsAnswer = catchAsync(async (req, res) => {
   const thread = await DiscussionForum.findById(threadId);
   if (!thread) throw new AppError('Thread not found', 404);
 
-  // Only thread author can mark as answer
-  if (thread.author.toString() !== req.user._id.toString()) {
-    throw new AppError('Only thread author can mark answers', 403);
+  // Only thread author or instructor/admin can mark as answer
+  const isAuthor = thread.author && thread.author.toString() === req.user._id.toString();
+  if (!isAuthor && req.user.role !== 'instructor' && req.user.role !== 'admin') {
+    throw new AppError('Not authorized to mark answers', 403);
   }
+
+  // Unmark all other replies for this thread
+  await ForumReply.updateMany({ threadId, isMarkedAsAnswer: true }, { isMarkedAsAnswer: false });
 
   const reply = await ForumReply.findByIdAndUpdate(
     replyId,
@@ -158,7 +226,7 @@ exports.markAsAnswer = catchAsync(async (req, res) => {
 
   res.json({
     success: true,
-    message: 'Reply marked as answer',
+    message: 'Reply marked as answer/correct',
     data: reply,
   });
 });
@@ -166,15 +234,19 @@ exports.markAsAnswer = catchAsync(async (req, res) => {
 // ─── PATCH: Upvote/Downvote ───────────────────────────────────────────────
 exports.voteReply = catchAsync(async (req, res) => {
   const { replyId } = req.params;
-  const { action } = req.body; // 'upvote' or 'downvote'
+  const { action = 'upvote' } = req.body; // 'upvote' or 'downvote'
 
-  const updateOps = {};
-  if (action === 'upvote') updateOps.$inc = { upvotes: 1 };
-  if (action === 'downvote') updateOps.$inc = { downvotes: 1 };
-
-  const reply = await ForumReply.findByIdAndUpdate(replyId, updateOps, { new: true });
-
+  const reply = await ForumReply.findById(replyId);
   if (!reply) throw new AppError('Reply not found', 404);
+
+  // Using a set of user IDs for upvotes/downvotes if possible, 
+  // but keeping simple increment for now as per current schema, 
+  // OR refactoring schema to use arrays for toggle logic.
+  
+  if (action === 'upvote') reply.upvotes = (reply.upvotes || 0) + 1;
+  else if (action === 'downvote') reply.downvotes = (reply.downvotes || 0) + 1;
+
+  await reply.save();
 
   res.json({ success: true, data: reply });
 });

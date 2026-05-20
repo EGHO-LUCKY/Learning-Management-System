@@ -16,7 +16,6 @@ const Wishlist = require('./Wishlist.model');
 const Cart = require('./Cart.model');
 const Notification = require('./Notification.model');
 const NotificationPreference = require('./NotificationPreference.model');
-const Question = require('./Question.model');
 const Payout = require('./Payout.model');
 const Achievement = require('./Achievement.model');
 const UserAchievement = require('./UserAchievement.model');
@@ -49,7 +48,6 @@ module.exports = {
   Cart,
   Notification,
   NotificationPreference,
-  Question,
   Payout,
   Achievement,
   UserAchievement,

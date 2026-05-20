@@ -6,16 +6,16 @@ const { protect, restrictTo } = require('../middlewares/auth.middleware');
 const { body } = require('express-validator');
 const validate = require('../middlewares/validate.middleware');
 
-payRouter.post('/payments/checkout', protect, [body('courseId').notEmpty()], validate, payCtrl.createCheckout);
-payRouter.get('/payments/checkout/:sessionId', protect, (req, res) => {
+payRouter.post('/checkout', protect, [body('courseId').notEmpty()], validate, payCtrl.createCheckout);
+payRouter.get('/checkout/:sessionId', protect, (req, res) => {
   const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
   stripe.checkout.sessions.retrieve(req.params.sessionId)
     .then(s => res.json({ success: true, data: { status: s.payment_status, sessionId: s.id } }))
     .catch(() => res.status(404).json({ success: false, message: 'Session not found' }));
 });
-payRouter.post('/payments/webhooks/stripe', payCtrl.stripeWebhook);
-payRouter.get('/payments/orders', protect, payCtrl.getOrders);
-payRouter.get('/payments/orders/:orderId', protect, async (req, res, next) => {
+payRouter.post('/webhooks/stripe', payCtrl.stripeWebhook);
+payRouter.get('/orders', protect, payCtrl.getOrders);
+payRouter.get('/orders/:orderId', protect, async (req, res, next) => {
   try {
     const { Order } = require('../models/index');
     const order = await Order.findOne({ _id: req.params.orderId, student: req.user._id })
@@ -24,8 +24,8 @@ payRouter.get('/payments/orders/:orderId', protect, async (req, res, next) => {
     res.json({ success: true, data: order });
   } catch (err) { next(err); }
 });
-payRouter.post('/payments/orders/:orderId/refund', protect, payCtrl.requestRefund);
-payRouter.get('/payments/orders/:orderId/invoice', protect, async (req, res, next) => {
+payRouter.post('/orders/:orderId/refund', protect, payCtrl.requestRefund);
+payRouter.get('/orders/:orderId/invoice', protect, async (req, res, next) => {
   try {
     const { Order } = require('../models/index');
     const order = await Order.findOne({ _id: req.params.orderId, student: req.user._id })
