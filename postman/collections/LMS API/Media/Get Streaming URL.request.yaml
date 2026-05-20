@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Get Streaming URL'
+url: "{{baseUrl}}/api/v1/media/video/:videoId/stream"
 method: GET
-url: '{{baseUrl}}/api/v1/media/video/:videoId/stream'
-order: 6000
 pathVariables:
-  - key: videoId
-    value: '{{videoId}}'
+  videoId: "{{videoId}}"
+order: 6000

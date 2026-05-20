@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Admin - Unban User'
+url: "{{baseUrl}}/api/v1/users/admin/users/:userId/unban"
 method: POST
-url: '{{baseUrl}}/api/v1/users/admin/users/:userId/unban'
-order: 12000
 pathVariables:
-  - key: userId
-    value: '{{userId}}'
+  userId: "{{userId}}"
+order: 12000

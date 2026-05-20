@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Get Public Profile'
+url: "{{baseUrl}}/api/v1/users/:userId/public"
 method: GET
-url: '{{baseUrl}}/api/v1/users/:userId/public'
-order: 6000
 pathVariables:
-  - key: userId
-    value: '{{userId}}'
+  userId: "{{userId}}"
+order: 6000

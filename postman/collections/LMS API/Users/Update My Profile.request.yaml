@@ -1,10 +1,8 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/users/me"
 method: PUT
-url: '{{baseUrl}}/api/v1/users/me'
-order: 2000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
   content: |-
@@ -14,3 +12,4 @@ body:
       "headline": "Software Engineer",
       "website": "https://example.com"
     }
+order: 2000

@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Get Order'
+url: "{{baseUrl}}/api/v1/payments/orders/:orderId"
 method: GET
-url: '{{baseUrl}}/api/v1/payments/orders/:orderId'
-order: 5000
 pathVariables:
-  - key: orderId
-    value: '{{orderId}}'
+  orderId: "{{orderId}}"
+order: 5000

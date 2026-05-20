@@ -1,12 +1,9 @@
 $kind: http-request
-name: 'Admin - Create Coupon'
+url: "{{baseUrl}}/api/v1/admin/coupons"
 method: POST
-url: '{{baseUrl}}/api/v1/admin/coupons'
-order: 9000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
-  content: |-
-    {}
+  content: "{}"
+order: 9000

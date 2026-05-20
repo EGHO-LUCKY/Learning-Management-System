@@ -1,14 +1,12 @@
 $kind: http-request
-name: 'Upload Course Thumbnail'
+url: "{{baseUrl}}/api/v1/courses/my-courses/:courseId/thumbnail"
 method: POST
-url: '{{baseUrl}}/api/v1/courses/my-courses/:courseId/thumbnail'
-order: 10000
 pathVariables:
-  - key: courseId
-    value: '{{courseId}}'
+  courseId: "{{courseId}}"
 body:
   type: formdata
   content:
-    - key: thumbnail
-      type: file
-      src: ''
+    - type: file
+      key: thumbnail
+      src: ""
+order: 10000

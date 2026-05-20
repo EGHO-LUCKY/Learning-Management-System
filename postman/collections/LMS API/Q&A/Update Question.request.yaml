@@ -1,15 +1,11 @@
 $kind: http-request
-name: 'Update Question'
+url: "{{baseUrl}}/api/v1/questions/:questionId"
 method: PUT
-url: '{{baseUrl}}/api/v1/questions/:questionId'
-order: 3000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 pathVariables:
-  - key: questionId
-    value: '{{questionId}}'
+  questionId: "{{questionId}}"
 body:
   type: json
-  content: |-
-    {}
+  content: "{}"
+order: 3000

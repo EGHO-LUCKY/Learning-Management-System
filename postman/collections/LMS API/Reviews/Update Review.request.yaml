@@ -1,17 +1,12 @@
 $kind: http-request
-name: 'Update Review'
+url: "{{baseUrl}}/api/v1/courses/:courseId/reviews/:reviewId"
 method: PUT
-url: '{{baseUrl}}/api/v1/courses/:courseId/reviews/:reviewId'
-order: 3000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 pathVariables:
-  - key: courseId
-    value: '{{courseId}}'
-  - key: reviewId
-    value: '{{reviewId}}'
+  courseId: "{{courseId}}"
+  reviewId: "{{reviewId}}"
 body:
   type: json
-  content: |-
-    {}
+  content: "{}"
+order: 3000

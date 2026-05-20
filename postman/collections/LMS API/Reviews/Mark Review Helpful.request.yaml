@@ -1,10 +1,7 @@
 $kind: http-request
-name: 'Mark Review Helpful'
+url: "{{baseUrl}}/api/v1/courses/:courseId/reviews/:reviewId/helpful"
 method: POST
-url: '{{baseUrl}}/api/v1/courses/:courseId/reviews/:reviewId/helpful'
-order: 5000
 pathVariables:
-  - key: courseId
-    value: '{{courseId}}'
-  - key: reviewId
-    value: '{{reviewId}}'
+  courseId: "{{courseId}}"
+  reviewId: "{{reviewId}}"
+order: 5000

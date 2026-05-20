@@ -1,11 +1,9 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/personalization/learning-paths"
 method: POST
-url: '{{baseUrl}}/api/v1/personalization/learning-paths'
-order: 10000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
-  content: |-
-    {}
+  content: "{}"
+order: 10000

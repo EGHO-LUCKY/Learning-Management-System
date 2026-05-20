@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Admin - Delete Tag'
+url: "{{baseUrl}}/api/v1/admin/tags/:tagId"
 method: DELETE
-url: '{{baseUrl}}/api/v1/admin/tags/:tagId'
-order: 8000
 pathVariables:
-  - key: tagId
-    value: '{{tagId}}'
+  tagId: "{{tagId}}"
+order: 8000

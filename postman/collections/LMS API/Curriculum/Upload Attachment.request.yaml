@@ -1,14 +1,12 @@
 $kind: http-request
-name: 'Upload Attachment'
+url: "{{baseUrl}}/api/v1/instructor/lectures/:lectureId/attachment"
 method: POST
-url: '{{baseUrl}}/api/v1/instructor/lectures/:lectureId/attachment'
-order: 13000
 pathVariables:
-  - key: lectureId
-    value: '{{lectureId}}'
+  lectureId: "{{lectureId}}"
 body:
   type: formdata
   content:
-    - key: attachment
-      type: file
-      src: ''
+    - type: file
+      key: attachment
+      src: ""
+order: 13000

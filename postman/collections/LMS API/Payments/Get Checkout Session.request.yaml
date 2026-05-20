@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Get Checkout Session'
+url: "{{baseUrl}}/api/v1/payments/checkout/:sessionId"
 method: GET
-url: '{{baseUrl}}/api/v1/payments/checkout/:sessionId'
-order: 2000
 pathVariables:
-  - key: sessionId
-    value: '{{sessionId}}'
+  sessionId: "{{sessionId}}"
+order: 2000

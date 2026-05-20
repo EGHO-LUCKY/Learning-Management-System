@@ -1,13 +1,12 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/auth/mfa/verify"
 method: POST
-url: '{{baseUrl}}/api/v1/auth/mfa/verify'
-order: 12000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
   content: |-
     {
       "totpCode": "123456"
     }
+order: 12000

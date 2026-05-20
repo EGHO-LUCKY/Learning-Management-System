@@ -1,5 +1,4 @@
 $kind: http-request
-name: 'Admin - Get Reported Reviews'
+url: "{{baseUrl}}/api/v1/admin/reviews/reported"
 method: GET
-url: '{{baseUrl}}/api/v1/admin/reviews/reported'
 order: 8000

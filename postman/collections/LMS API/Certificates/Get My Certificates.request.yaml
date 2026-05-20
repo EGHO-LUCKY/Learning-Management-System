@@ -1,4 +1,4 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/certificates/me"
 method: GET
-url: '{{baseUrl}}/api/v1/certificates/me'
 order: 2000

@@ -1,15 +1,11 @@
 $kind: http-request
-name: 'Admin - Update User'
+url: "{{baseUrl}}/api/v1/users/admin/users/:userId"
 method: PUT
-url: '{{baseUrl}}/api/v1/users/admin/users/:userId'
-order: 9000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 pathVariables:
-  - key: userId
-    value: '{{userId}}'
+  userId: "{{userId}}"
 body:
   type: json
-  content: |-
-    {}
+  content: "{}"
+order: 9000

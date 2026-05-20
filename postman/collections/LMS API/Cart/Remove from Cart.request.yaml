@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Remove from Cart'
+url: "{{baseUrl}}/api/v1/cart/:courseId"
 method: DELETE
-url: '{{baseUrl}}/api/v1/cart/:courseId'
-order: 3000
 pathVariables:
-  - key: courseId
-    value: '{{courseId}}'
+  courseId: "{{courseId}}"
+order: 3000

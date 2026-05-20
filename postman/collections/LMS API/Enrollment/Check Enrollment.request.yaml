@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Check Enrollment'
+url: "{{baseUrl}}/api/v1/enrollments/me/:courseId"
 method: GET
-url: '{{baseUrl}}/api/v1/enrollments/me/:courseId'
-order: 3000
 pathVariables:
-  - key: courseId
-    value: '{{courseId}}'
+  courseId: "{{courseId}}"
+order: 3000

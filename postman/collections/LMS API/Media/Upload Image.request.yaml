@@ -1,10 +1,10 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/media/upload/image"
 method: POST
-url: '{{baseUrl}}/api/v1/media/upload/image'
-order: 1000
 body:
   type: formdata
   content:
-    - key: image
-      type: file
-      src: ''
+    - type: file
+      key: image
+      src: ""
+order: 1000

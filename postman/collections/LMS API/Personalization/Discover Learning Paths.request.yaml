@@ -1,4 +1,4 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/personalization/learning-paths"
 method: GET
-url: '{{baseUrl}}/api/v1/personalization/learning-paths'
 order: 1000

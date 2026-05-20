@@ -1,4 +1,4 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/courses/trending"
 method: GET
-url: '{{baseUrl}}/api/v1/courses/trending'
 order: 3000

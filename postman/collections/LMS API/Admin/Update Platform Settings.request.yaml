@@ -1,10 +1,8 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/admin/settings"
 method: PUT
-url: '{{baseUrl}}/api/v1/admin/settings'
-order: 2000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
   content: |-
@@ -12,3 +10,4 @@ body:
       "maintenanceMode": false,
       "allowNewRegistrations": true
     }
+order: 2000

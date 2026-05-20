@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Resolve Thread'
+url: "{{baseUrl}}/api/v1/discussions/discussions/:threadId/resolve"
 method: PATCH
-url: '{{baseUrl}}/api/v1/discussions/discussions/:threadId/resolve'
-order: 9000
 pathVariables:
-  - key: threadId
-    value: '{{threadId}}'
+  threadId: "{{threadId}}"
+order: 9000

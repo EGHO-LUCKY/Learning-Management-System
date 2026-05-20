@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Generate Certificate'
+url: "{{baseUrl}}/api/v1/certificates/generate/:courseId"
 method: POST
-url: '{{baseUrl}}/api/v1/certificates/generate/:courseId'
-order: 1000
 pathVariables:
-  - key: courseId
-    value: '{{courseId}}'
+  courseId: "{{courseId}}"
+order: 1000

@@ -1,4 +1,4 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/auth/mfa/enable"
 method: POST
-url: '{{baseUrl}}/api/v1/auth/mfa/enable'
 order: 11000

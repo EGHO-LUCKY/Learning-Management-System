@@ -1,4 +1,4 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/gamification/leaderboards/weekly"
 method: GET
-url: '{{baseUrl}}/api/v1/gamification/leaderboards/weekly'
 order: 7000

@@ -1,5 +1,4 @@
 $kind: http-request
-name: 'Admin - Generate Recommendations'
+url: "{{baseUrl}}/api/v1/personalization/recommendations/generate"
 method: POST
-url: '{{baseUrl}}/api/v1/personalization/recommendations/generate'
 order: 15000

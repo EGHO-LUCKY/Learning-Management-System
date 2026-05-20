@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Admin - Approve Course'
+url: "{{baseUrl}}/api/v1/courses/admin/:courseId/approve"
 method: POST
-url: '{{baseUrl}}/api/v1/courses/admin/:courseId/approve'
-order: 12000
 pathVariables:
-  - key: courseId
-    value: '{{courseId}}'
+  courseId: "{{courseId}}"
+order: 12000

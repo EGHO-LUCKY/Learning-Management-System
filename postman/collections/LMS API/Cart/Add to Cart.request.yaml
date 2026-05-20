@@ -1,13 +1,12 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/cart"
 method: POST
-url: '{{baseUrl}}/api/v1/cart'
-order: 2000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
   content: |-
     {
       "courseId": "{{courseId}}"
     }
+order: 2000

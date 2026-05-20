@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Admin - Get User'
+url: "{{baseUrl}}/api/v1/users/admin/users/:userId"
 method: GET
-url: '{{baseUrl}}/api/v1/users/admin/users/:userId'
-order: 8000
 pathVariables:
-  - key: userId
-    value: '{{userId}}'
+  userId: "{{userId}}"
+order: 8000

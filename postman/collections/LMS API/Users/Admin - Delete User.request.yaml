@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Admin - Delete User'
+url: "{{baseUrl}}/api/v1/users/admin/users/:userId"
 method: DELETE
-url: '{{baseUrl}}/api/v1/users/admin/users/:userId'
-order: 10000
 pathVariables:
-  - key: userId
-    value: '{{userId}}'
+  userId: "{{userId}}"
+order: 10000

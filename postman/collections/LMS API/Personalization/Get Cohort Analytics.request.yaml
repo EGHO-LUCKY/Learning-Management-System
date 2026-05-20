@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Get Cohort Analytics'
+url: "{{baseUrl}}/api/v1/personalization/cohort/:cohortId/analytics"
 method: GET
-url: '{{baseUrl}}/api/v1/personalization/cohort/:cohortId/analytics'
-order: 14000
 pathVariables:
-  - key: cohortId
-    value: '{{cohortId}}'
+  cohortId: "{{cohortId}}"
+order: 14000

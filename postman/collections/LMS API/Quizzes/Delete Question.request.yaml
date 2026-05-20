@@ -1,10 +1,7 @@
 $kind: http-request
-name: 'Delete Question'
+url: "{{baseUrl}}/api/v1/instructor/quizzes/:quizId/questions/:questionId"
 method: DELETE
-url: '{{baseUrl}}/api/v1/instructor/quizzes/:quizId/questions/:questionId'
-order: 5000
 pathVariables:
-  - key: quizId
-    value: '{{quizId}}'
-  - key: questionId
-    value: '{{questionId}}'
+  quizId: "{{quizId}}"
+  questionId: "{{questionId}}"
+order: 5000

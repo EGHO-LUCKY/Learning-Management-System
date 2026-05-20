@@ -1,17 +1,14 @@
 $kind: http-request
-name: 'Post Answer'
+url: "{{baseUrl}}/api/v1/questions/:questionId/answers"
 method: POST
-url: '{{baseUrl}}/api/v1/questions/:questionId/answers'
-order: 5000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 pathVariables:
-  - key: questionId
-    value: '{{questionId}}'
+  questionId: "{{questionId}}"
 body:
   type: json
   content: |-
     {
       "body": "Here is the answer..."
     }
+order: 5000

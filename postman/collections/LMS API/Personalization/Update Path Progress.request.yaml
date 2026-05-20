@@ -1,15 +1,11 @@
 $kind: http-request
-name: 'Update Path Progress'
+url: "{{baseUrl}}/api/v1/personalization/learning-paths/:pathId/progress"
 method: PATCH
-url: '{{baseUrl}}/api/v1/personalization/learning-paths/:pathId/progress'
-order: 12000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 pathVariables:
-  - key: pathId
-    value: '{{pathId}}'
+  pathId: "{{pathId}}"
 body:
   type: json
-  content: |-
-    {}
+  content: "{}"
+order: 12000

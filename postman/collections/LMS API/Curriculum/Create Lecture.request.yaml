@@ -1,14 +1,10 @@
 $kind: http-request
-name: 'Create Lecture'
+url: "{{baseUrl}}/api/v1/instructor/sections/:sectionId/lectures"
 method: POST
-url: '{{baseUrl}}/api/v1/instructor/sections/:sectionId/lectures'
-order: 6000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 pathVariables:
-  - key: sectionId
-    value: '{{sectionId}}'
+  sectionId: "{{sectionId}}"
 body:
   type: json
   content: |-
@@ -16,3 +12,4 @@ body:
       "title": "Lecture 1",
       "type": "video"
     }
+order: 6000

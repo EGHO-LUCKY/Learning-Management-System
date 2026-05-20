@@ -1,17 +1,14 @@
 $kind: http-request
-name: 'Create Reply'
+url: "{{baseUrl}}/api/v1/discussions/discussions/:threadId/replies"
 method: POST
-url: '{{baseUrl}}/api/v1/discussions/discussions/:threadId/replies'
-order: 5000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 pathVariables:
-  - key: threadId
-    value: '{{threadId}}'
+  threadId: "{{threadId}}"
 body:
   type: json
   content: |-
     {
       "body": "My reply..."
     }
+order: 5000

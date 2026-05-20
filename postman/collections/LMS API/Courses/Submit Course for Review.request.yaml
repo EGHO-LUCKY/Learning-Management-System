@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Submit Course for Review'
+url: "{{baseUrl}}/api/v1/courses/my-courses/:courseId/submit"
 method: POST
-url: '{{baseUrl}}/api/v1/courses/my-courses/:courseId/submit'
-order: 9000
 pathVariables:
-  - key: courseId
-    value: '{{courseId}}'
+  courseId: "{{courseId}}"
+order: 9000

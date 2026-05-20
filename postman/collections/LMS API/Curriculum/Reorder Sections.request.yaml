@@ -1,15 +1,11 @@
 $kind: http-request
-name: 'Reorder Sections'
+url: "{{baseUrl}}/api/v1/instructor/courses/:courseId/sections/reorder"
 method: PUT
-url: '{{baseUrl}}/api/v1/instructor/courses/:courseId/sections/reorder'
-order: 5000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 pathVariables:
-  - key: courseId
-    value: '{{courseId}}'
+  courseId: "{{courseId}}"
 body:
   type: json
-  content: |-
-    {}
+  content: "{}"
+order: 5000

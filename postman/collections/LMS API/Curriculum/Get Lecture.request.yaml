@@ -1,10 +1,7 @@
 $kind: http-request
-name: 'Get Lecture'
+url: "{{baseUrl}}/api/v1/sections/:sectionId/lectures/:lectureId"
 method: GET
-url: '{{baseUrl}}/api/v1/sections/:sectionId/lectures/:lectureId'
-order: 7000
 pathVariables:
-  - key: sectionId
-    value: '{{sectionId}}'
-  - key: lectureId
-    value: '{{lectureId}}'
+  sectionId: "{{sectionId}}"
+  lectureId: "{{lectureId}}"
+order: 7000

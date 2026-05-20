@@ -1,7 +1,6 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/search?q=javascript"
 method: GET
-url: '{{baseUrl}}/api/v1/search'
-order: 1000
 queryParams:
-  - key: q
-    value: javascript
+  q: javascript
+order: 1000

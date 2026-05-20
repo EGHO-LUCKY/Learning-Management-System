@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Vote on Reply'
+url: "{{baseUrl}}/api/v1/discussions/replies/:replyId/vote"
 method: POST
-url: '{{baseUrl}}/api/v1/discussions/replies/:replyId/vote'
-order: 7000
 pathVariables:
-  - key: replyId
-    value: '{{replyId}}'
+  replyId: "{{replyId}}"
+order: 7000

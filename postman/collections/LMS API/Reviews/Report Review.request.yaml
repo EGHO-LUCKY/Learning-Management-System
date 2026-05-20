@@ -1,19 +1,15 @@
 $kind: http-request
-name: 'Report Review'
+url: "{{baseUrl}}/api/v1/courses/:courseId/reviews/:reviewId/report"
 method: POST
-url: '{{baseUrl}}/api/v1/courses/:courseId/reviews/:reviewId/report'
-order: 7000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 pathVariables:
-  - key: courseId
-    value: '{{courseId}}'
-  - key: reviewId
-    value: '{{reviewId}}'
+  courseId: "{{courseId}}"
+  reviewId: "{{reviewId}}"
 body:
   type: json
   content: |-
     {
       "reason": "Spam"
     }
+order: 7000

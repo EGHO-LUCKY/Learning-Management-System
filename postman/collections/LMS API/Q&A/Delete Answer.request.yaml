@@ -1,10 +1,7 @@
 $kind: http-request
-name: 'Delete Answer'
+url: "{{baseUrl}}/api/v1/questions/:questionId/answers/:answerId"
 method: DELETE
-url: '{{baseUrl}}/api/v1/questions/:questionId/answers/:answerId'
-order: 7000
 pathVariables:
-  - key: questionId
-    value: '{{questionId}}'
-  - key: answerId
-    value: '{{answerId}}'
+  questionId: "{{questionId}}"
+  answerId: "{{answerId}}"
+order: 7000

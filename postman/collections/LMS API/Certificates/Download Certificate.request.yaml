@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Download Certificate'
+url: "{{baseUrl}}/api/v1/certificates/:certificateId/download"
 method: GET
-url: '{{baseUrl}}/api/v1/certificates/:certificateId/download'
-order: 5000
 pathVariables:
-  - key: certificateId
-    value: '{{certificateId}}'
+  certificateId: "{{certificateId}}"
+order: 5000

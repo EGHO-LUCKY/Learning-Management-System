@@ -1,15 +1,11 @@
 $kind: http-request
-name: 'Create Assignment'
+url: "{{baseUrl}}/api/v1/instructor/lectures/:lectureId/assignment"
 method: POST
-url: '{{baseUrl}}/api/v1/instructor/lectures/:lectureId/assignment'
-order: 9000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 pathVariables:
-  - key: lectureId
-    value: '{{lectureId}}'
+  lectureId: "{{lectureId}}"
 body:
   type: json
-  content: |-
-    {}
+  content: "{}"
+order: 9000

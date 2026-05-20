@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Get Video Upload Status'
+url: "{{baseUrl}}/api/v1/instructor/lectures/:lectureId/video/status"
 method: GET
-url: '{{baseUrl}}/api/v1/instructor/lectures/:lectureId/video/status'
-order: 12000
 pathVariables:
-  - key: lectureId
-    value: '{{lectureId}}'
+  lectureId: "{{lectureId}}"
+order: 12000

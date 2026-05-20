@@ -1,4 +1,4 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/instructor/analytics/reviews"
 method: GET
-url: '{{baseUrl}}/api/v1/instructor/analytics/reviews'
 order: 5000

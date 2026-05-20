@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Delete Notification'
+url: "{{baseUrl}}/api/v1/notifications/:notificationId"
 method: DELETE
-url: '{{baseUrl}}/api/v1/notifications/:notificationId'
-order: 6000
 pathVariables:
-  - key: notificationId
-    value: '{{notificationId}}'
+  notificationId: "{{notificationId}}"
+order: 6000

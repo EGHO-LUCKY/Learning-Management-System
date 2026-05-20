@@ -1,17 +1,14 @@
 $kind: http-request
-name: 'Add Section'
+url: "{{baseUrl}}/api/v1/instructor/courses/:courseId/sections"
 method: POST
-url: '{{baseUrl}}/api/v1/instructor/courses/:courseId/sections'
-order: 2000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 pathVariables:
-  - key: courseId
-    value: '{{courseId}}'
+  courseId: "{{courseId}}"
 body:
   type: json
   content: |-
     {
       "title": "Section 1"
     }
+order: 2000

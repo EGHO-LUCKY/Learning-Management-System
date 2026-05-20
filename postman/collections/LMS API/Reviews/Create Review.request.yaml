@@ -1,14 +1,10 @@
 $kind: http-request
-name: 'Create Review'
+url: "{{baseUrl}}/api/v1/courses/:courseId/reviews"
 method: POST
-url: '{{baseUrl}}/api/v1/courses/:courseId/reviews'
-order: 2000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 pathVariables:
-  - key: courseId
-    value: '{{courseId}}'
+  courseId: "{{courseId}}"
 body:
   type: json
   content: |-
@@ -16,3 +12,4 @@ body:
       "rating": 5,
       "comment": "Great course!"
     }
+order: 2000

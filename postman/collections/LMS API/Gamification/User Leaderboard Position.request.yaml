@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'User Leaderboard Position'
+url: "{{baseUrl}}/api/v1/gamification/users/:userId/leaderboard"
 method: GET
-url: '{{baseUrl}}/api/v1/gamification/users/:userId/leaderboard'
-order: 15000
 pathVariables:
-  - key: userId
-    value: '{{userId}}'
+  userId: "{{userId}}"
+order: 15000

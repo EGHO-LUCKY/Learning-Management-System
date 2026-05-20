@@ -1,13 +1,12 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/auth/mfa/disable"
 method: POST
-url: '{{baseUrl}}/api/v1/auth/mfa/disable'
-order: 13000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
   content: |-
     {
       "totpCode": "123456"
     }
+order: 13000

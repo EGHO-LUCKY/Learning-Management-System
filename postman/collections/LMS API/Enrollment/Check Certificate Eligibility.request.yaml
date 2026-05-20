@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Check Certificate Eligibility'
+url: "{{baseUrl}}/api/v1/enrollments/progress/:courseId/certificate/eligibility"
 method: GET
-url: '{{baseUrl}}/api/v1/enrollments/progress/:courseId/certificate/eligibility'
-order: 9000
 pathVariables:
-  - key: courseId
-    value: '{{courseId}}'
+  courseId: "{{courseId}}"
+order: 9000

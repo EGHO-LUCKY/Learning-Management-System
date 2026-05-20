@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Verify Certificate'
+url: "{{baseUrl}}/api/v1/certificates/verify/:verificationCode"
 method: GET
-url: '{{baseUrl}}/api/v1/certificates/verify/:verificationCode'
-order: 3000
 pathVariables:
-  - key: verificationCode
-    value: '{{verificationCode}}'
+  verificationCode: "{{verificationCode}}"
+order: 3000

@@ -1,19 +1,15 @@
 $kind: http-request
-name: 'Save Video Position'
+url: "{{baseUrl}}/api/v1/enrollments/progress/:courseId/lectures/:lectureId/position"
 method: PUT
-url: '{{baseUrl}}/api/v1/enrollments/progress/:courseId/lectures/:lectureId/position'
-order: 8000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 pathVariables:
-  - key: courseId
-    value: '{{courseId}}'
-  - key: lectureId
-    value: '{{lectureId}}'
+  courseId: "{{courseId}}"
+  lectureId: "{{lectureId}}"
 body:
   type: json
   content: |-
     {
       "positionSeconds": 120
     }
+order: 8000

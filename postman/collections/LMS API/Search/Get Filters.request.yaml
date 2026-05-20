@@ -1,4 +1,4 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/search/filters"
 method: GET
-url: '{{baseUrl}}/api/v1/search/filters'
 order: 3000

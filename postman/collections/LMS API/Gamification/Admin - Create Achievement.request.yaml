@@ -1,12 +1,9 @@
 $kind: http-request
-name: 'Admin - Create Achievement'
+url: "{{baseUrl}}/api/v1/gamification/achievements"
 method: POST
-url: '{{baseUrl}}/api/v1/gamification/achievements'
-order: 17000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
-  content: |-
-    {}
+  content: "{}"
+order: 17000

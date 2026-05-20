@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Get Courses by Category'
+url: "{{baseUrl}}/api/v1/categories/:categoryId/courses"
 method: GET
-url: '{{baseUrl}}/api/v1/categories/:categoryId/courses'
-order: 2000
 pathVariables:
-  - key: categoryId
-    value: '{{categoryId}}'
+  categoryId: "{{categoryId}}"
+order: 2000

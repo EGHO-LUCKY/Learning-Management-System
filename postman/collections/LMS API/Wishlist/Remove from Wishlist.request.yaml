@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Remove from Wishlist'
+url: "{{baseUrl}}/api/v1/wishlist/:courseId"
 method: DELETE
-url: '{{baseUrl}}/api/v1/wishlist/:courseId'
-order: 3000
 pathVariables:
-  - key: courseId
-    value: '{{courseId}}'
+  courseId: "{{courseId}}"
+order: 3000

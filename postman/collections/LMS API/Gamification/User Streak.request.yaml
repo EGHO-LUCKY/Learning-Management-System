@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'User Streak'
+url: "{{baseUrl}}/api/v1/gamification/users/:userId/streak"
 method: GET
-url: '{{baseUrl}}/api/v1/gamification/users/:userId/streak'
-order: 16000
 pathVariables:
-  - key: userId
-    value: '{{userId}}'
+  userId: "{{userId}}"
+order: 16000

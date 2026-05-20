@@ -1,5 +1,4 @@
 $kind: http-request
-name: 'Admin - Get Coupons'
+url: "{{baseUrl}}/api/v1/admin/coupons"
 method: GET
-url: '{{baseUrl}}/api/v1/admin/coupons'
 order: 10000

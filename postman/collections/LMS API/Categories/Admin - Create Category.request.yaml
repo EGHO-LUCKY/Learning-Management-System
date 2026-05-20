@@ -1,14 +1,12 @@
 $kind: http-request
-name: 'Admin - Create Category'
+url: "{{baseUrl}}/api/v1/admin/categories"
 method: POST
-url: '{{baseUrl}}/api/v1/admin/categories'
-order: 3000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
   content: |-
     {
       "name": "Programming"
     }
+order: 3000

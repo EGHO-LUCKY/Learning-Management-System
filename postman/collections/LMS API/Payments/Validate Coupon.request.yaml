@@ -1,10 +1,8 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/coupons/validate"
 method: POST
-url: '{{baseUrl}}/api/v1/coupons/validate'
-order: 8000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
   content: |-
@@ -12,3 +10,4 @@ body:
       "code": "SAVE20",
       "courseId": "{{courseId}}"
     }
+order: 8000

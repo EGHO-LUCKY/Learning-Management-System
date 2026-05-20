@@ -1,15 +1,11 @@
 $kind: http-request
-name: 'Admin - Update Category'
+url: "{{baseUrl}}/api/v1/admin/categories/:categoryId"
 method: PUT
-url: '{{baseUrl}}/api/v1/admin/categories/:categoryId'
-order: 4000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 pathVariables:
-  - key: categoryId
-    value: '{{categoryId}}'
+  categoryId: "{{categoryId}}"
 body:
   type: json
-  content: |-
-    {}
+  content: "{}"
+order: 4000

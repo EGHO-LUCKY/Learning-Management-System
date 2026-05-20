@@ -1,8 +1,6 @@
 $kind: http-request
-name: 'Get Achievement Details'
+url: "{{baseUrl}}/api/v1/gamification/achievements/:achievementId"
 method: GET
-url: '{{baseUrl}}/api/v1/gamification/achievements/:achievementId'
-order: 3000
 pathVariables:
-  - key: achievementId
-    value: '{{achievementId}}'
+  achievementId: "{{achievementId}}"
+order: 3000

@@ -1,4 +1,4 @@
 $kind: http-request
+url: "{{baseUrl}}/api/v1/gamification/achievements/trending"
 method: GET
-url: '{{baseUrl}}/api/v1/gamification/achievements/trending'
 order: 2000
