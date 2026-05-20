@@ -1,4 +1,4 @@
 $kind: http-request
-url: "{{baseUrl}}/api/v1/instructor/earnings/history"
+url: "{{baseUrl}}/api/v1/instructor/earnings/history?page=1&limit=20"
 method: GET
 order: 12000
