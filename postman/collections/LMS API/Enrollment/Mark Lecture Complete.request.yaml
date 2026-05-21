@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/enrollments/progress/:courseId/lectures/:lectureId/complete"
+method: POST
+pathVariables:
+  courseId: "{{courseId}}"
+  lectureId: "{{lectureId}}"
+order: 6000

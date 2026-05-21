@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/discussions/discussions/:threadId/replies"
+method: GET
+pathVariables:
+  threadId: "{{threadId}}"
+order: 6000

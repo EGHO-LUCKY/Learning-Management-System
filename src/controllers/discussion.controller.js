@@ -39,7 +39,7 @@ exports.createThread = catchAsync(async (req, res) => {
 // ─── GET: Get Course Discussions ───────────────────────────────────────────
 exports.getThreads = catchAsync(async (req, res) => {
   const { courseId } = req.params;
-  const { threadType, isResolved, sort, page = 1, limit = 20 } = req.query;
+  const { threadType, isResolved } = req.query;
 
   const query = { course: courseId };
   if (threadType) query.threadType = threadType;
@@ -112,6 +112,83 @@ exports.createReply = catchAsync(async (req, res) => {
   });
 });
 
+// ─── PUT: Update Thread (Q&A/Discussion) ───────────────────────────────────
+exports.updateThread = catchAsync(async (req, res) => {
+  const { threadId } = req.params;
+  const { title, content, tags } = req.body;
+
+  let thread = await DiscussionForum.findById(threadId);
+  if (!thread) throw new AppError('Thread not found', 404);
+
+  // Check authorization
+  const isAuthor = thread.author && thread.author.toString() === req.user._id.toString();
+  if (!isAuthor && req.user.role !== 'admin') {
+    throw new AppError('Not authorized to update this thread', 403);
+  }
+
+  thread = await DiscussionForum.findByIdAndUpdate(
+    threadId,
+    { title, content, tags, lastActivityAt: new Date() },
+    { new: true, runValidators: true }
+  );
+
+  res.json({ success: true, data: thread });
+});
+
+// ─── PUT: Update Reply/Answer ──────────────────────────────────────────────
+exports.updateReply = catchAsync(async (req, res) => {
+  const { replyId } = req.params;
+  const { content } = req.body;
+
+  let reply = await ForumReply.findById(replyId);
+  if (!reply) throw new AppError('Reply not found', 404);
+
+  // Check ownership validation against threadId
+  if (reply.threadId.toString() !== req.params.threadId) {
+    throw new AppError('Reply does not belong to this thread', 404);
+  }
+
+  // Check authorization
+  const isAuthor = reply.author && reply.author.toString() === req.user._id.toString();
+  if (!isAuthor && req.user.role !== 'admin') {
+    throw new AppError('Not authorized to update this reply', 403);
+  }
+
+  reply = await ForumReply.findByIdAndUpdate(
+    replyId,
+    { content },
+    { new: true, runValidators: true }
+  ).populate('author', 'name avatar');
+
+  res.json({ success: true, data: reply });
+});
+
+// ─── DELETE: Delete Reply/Answer ───────────────────────────────────────────
+exports.deleteReply = catchAsync(async (req, res) => {
+  const { replyId } = req.params;
+
+  const reply = await ForumReply.findById(replyId);
+  if (!reply) throw new AppError('Reply not found', 404);
+
+  // Check ownership validation against threadId
+  if (reply.threadId.toString() !== req.params.threadId) {
+    throw new AppError('Reply does not belong to this thread', 404);
+  }
+
+  // Check authorization
+  const isAuthor = reply.author && reply.author.toString() === req.user._id.toString();
+  if (!isAuthor && req.user.role !== 'admin') {
+    throw new AppError('Not authorized to delete this reply', 403);
+  }
+
+  await ForumReply.findByIdAndDelete(replyId);
+
+  // Decrement thread reply count
+  await DiscussionForum.findByIdAndUpdate(reply.threadId, { $inc: { replyCount: -1 } });
+
+  res.json({ success: true, message: 'Reply deleted successfully' });
+});
+
 // ─── GET: Get Thread Replies ──────────────────────────────────────────────
 exports.getReplies = catchAsync(async (req, res) => {
   const { threadId } = req.params;
@@ -139,10 +216,14 @@ exports.markAsAnswer = catchAsync(async (req, res) => {
   const thread = await DiscussionForum.findById(threadId);
   if (!thread) throw new AppError('Thread not found', 404);
 
-  // Only thread author can mark as answer
-  if (thread.author.toString() !== req.user._id.toString()) {
-    throw new AppError('Only thread author can mark answers', 403);
+  // Only thread author or instructor/admin can mark as answer
+  const isAuthor = thread.author && thread.author.toString() === req.user._id.toString();
+  if (!isAuthor && req.user.role !== 'instructor' && req.user.role !== 'admin') {
+    throw new AppError('Not authorized to mark answers', 403);
   }
+
+  // Unmark all other replies for this thread
+  await ForumReply.updateMany({ threadId, isMarkedAsAnswer: true }, { isMarkedAsAnswer: false });
 
   const reply = await ForumReply.findByIdAndUpdate(
     replyId,
@@ -158,7 +239,7 @@ exports.markAsAnswer = catchAsync(async (req, res) => {
 
   res.json({
     success: true,
-    message: 'Reply marked as answer',
+    message: 'Reply marked as answer/correct',
     data: reply,
   });
 });
@@ -166,15 +247,39 @@ exports.markAsAnswer = catchAsync(async (req, res) => {
 // ─── PATCH: Upvote/Downvote ───────────────────────────────────────────────
 exports.voteReply = catchAsync(async (req, res) => {
   const { replyId } = req.params;
-  const { action } = req.body; // 'upvote' or 'downvote'
+  const { action = 'upvote' } = req.body; // 'upvote' or 'downvote'
+  const userId = req.user._id;
 
-  const updateOps = {};
-  if (action === 'upvote') updateOps.$inc = { upvotes: 1 };
-  if (action === 'downvote') updateOps.$inc = { downvotes: 1 };
-
-  const reply = await ForumReply.findByIdAndUpdate(replyId, updateOps, { new: true });
-
+  const reply = await ForumReply.findById(replyId);
   if (!reply) throw new AppError('Reply not found', 404);
+
+  // Initialize arrays if they don't exist
+  if (!reply.upvoters) reply.upvoters = [];
+  if (!reply.downvoters) reply.downvoters = [];
+
+  const isUpvoted = reply.upvoters.some(id => id.toString() === userId.toString());
+  const isDownvoted = reply.downvoters.some(id => id.toString() === userId.toString());
+
+  if (action === 'upvote') {
+    if (isUpvoted) {
+      reply.upvoters = reply.upvoters.filter(id => id.toString() !== userId.toString());
+    } else {
+      reply.upvoters.push(userId);
+      reply.downvoters = reply.downvoters.filter(id => id.toString() !== userId.toString());
+    }
+  } else if (action === 'downvote') {
+    if (isDownvoted) {
+      reply.downvoters = reply.downvoters.filter(id => id.toString() !== userId.toString());
+    } else {
+      reply.downvoters.push(userId);
+      reply.upvoters = reply.upvoters.filter(id => id.toString() !== userId.toString());
+    }
+  }
+
+  reply.upvotes = reply.upvoters.length;
+  reply.downvotes = reply.downvoters.length;
+
+  await reply.save();
 
   res.json({ success: true, data: reply });
 });
@@ -203,7 +308,8 @@ exports.deleteThread = catchAsync(async (req, res) => {
   if (!thread) throw new AppError('Thread not found', 404);
 
   // Check authorization
-  if (thread.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+  const isAuthor = thread.author && thread.author.toString() === req.user._id.toString();
+  if (!isAuthor && req.user.role !== 'admin') {
     throw new AppError('Not authorized to delete this thread', 403);
   }
 

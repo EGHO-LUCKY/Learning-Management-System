@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/instructor/courses/:courseId/reviews/:reviewId/respond"
+method: POST
+headers:
+  Content-Type: application/json
+pathVariables:
+  courseId: "{{courseId}}"
+  reviewId: "{{reviewId}}"
+body:
+  type: json
+  content: |-
+    {
+      "response": "Thank you!"
+    }
+order: 6000

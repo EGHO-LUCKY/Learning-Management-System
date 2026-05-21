@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/gamification/users/:userId/streak"
+method: GET
+pathVariables:
+  userId: "{{userId}}"
+order: 16000

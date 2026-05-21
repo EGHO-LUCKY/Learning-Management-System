@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/categories/:categoryId/courses"
+method: GET
+pathVariables:
+  categoryId: "{{categoryId}}"
+order: 2000

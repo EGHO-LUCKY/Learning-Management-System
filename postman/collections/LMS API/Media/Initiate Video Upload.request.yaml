@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/media/upload/video/initiate"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "filename": "lecture.mp4",
+      "size": 104857600,
+      "mimeType": "video/mp4"
+    }
+order: 2000

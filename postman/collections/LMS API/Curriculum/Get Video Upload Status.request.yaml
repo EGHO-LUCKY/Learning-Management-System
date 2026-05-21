@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/instructor/lectures/:lectureId/video/status"
+method: GET
+pathVariables:
+  lectureId: "{{lectureId}}"
+order: 12000

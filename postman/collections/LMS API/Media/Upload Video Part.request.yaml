@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/media/upload/video/:uploadId/part/:partNumber"
+method: PUT
+pathVariables:
+  uploadId: "{{uploadId}}"
+  partNumber: "1"
+order: 3000

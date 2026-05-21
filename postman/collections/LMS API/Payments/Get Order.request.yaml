@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/payments/orders/:orderId"
+method: GET
+pathVariables:
+  orderId: "{{orderId}}"
+order: 5000

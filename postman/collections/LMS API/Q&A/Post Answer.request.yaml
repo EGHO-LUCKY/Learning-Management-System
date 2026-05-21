@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/questions/:questionId/answers"
+method: POST
+headers:
+  Content-Type: application/json
+pathVariables:
+  questionId: "{{questionId}}"
+body:
+  type: json
+  content: |-
+    {
+      "body": "Here is the answer..."
+    }
+order: 5000

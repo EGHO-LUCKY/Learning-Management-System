@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/courses/my-courses/:courseId/thumbnail"
+method: POST
+pathVariables:
+  courseId: "{{courseId}}"
+body:
+  type: formdata
+  content:
+    - type: file
+      key: thumbnail
+      src: ""
+order: 10000

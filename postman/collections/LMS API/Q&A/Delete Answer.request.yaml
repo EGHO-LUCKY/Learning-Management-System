@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/questions/:questionId/answers/:answerId"
+method: DELETE
+pathVariables:
+  questionId: "{{questionId}}"
+  answerId: "{{answerId}}"
+order: 7000

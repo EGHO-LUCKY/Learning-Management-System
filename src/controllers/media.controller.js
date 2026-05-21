@@ -1,7 +1,8 @@
-const { Lecture } = require('../models/index');
+const { Lecture, MediaUpload } = require('../models/index');
 const { AppError } = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 const cloudinaryService = require('../services/cloudinary.service');
+const { v4: uuidv4 } = require('uuid');
 
 exports.uploadImage = catchAsync(async (req, res) => {
   if (!req.file) throw new AppError('Please upload an image file', 400);
@@ -12,33 +13,107 @@ exports.uploadImage = catchAsync(async (req, res) => {
 exports.initiateVideoUpload = catchAsync(async (req, res) => {
   const { filename, size, mimeType } = req.body;
   if (!filename || !size) throw new AppError('filename and size are required', 400);
-  // In production: initiate AWS S3 multipart. Here we return a stub uploadId.
-  const uploadId = `lms_upload_${Date.now()}_${req.user._id}`;
-  const partSize = 6 * 1024 * 1024; // 6MB chunks
-  const numParts = Math.ceil(size / partSize);
+
+  const totalSize = parseInt(size, 10);
+  if (isNaN(totalSize) || totalSize <= 0) throw new AppError('Invalid file size', 400);
+
+  const uploadId = `lms_up_${uuidv4()}`;
+  const partSize = 6 * 1024 * 1024; // 6MB
+  const numParts = Math.ceil(totalSize / partSize);
+
+  await MediaUpload.create({
+    uploadId,
+    instructor: req.user._id,
+    filename,
+    totalSize,
+    mimeType,
+    status: 'pending',
+    provider: 'cloudinary',
+  });
+
   res.json({ success: true, data: { uploadId, numParts, partSize, expiresIn: 3600 } });
 });
 
 exports.uploadVideoPart = catchAsync(async (req, res) => {
-  const { uploadId, partNumber } = req.params;
-  if (!req.file && !req.body) throw new AppError('No data received for this part', 400);
-  // In production: upload this part to S3 and get ETag back
-  const etag = `etag_part${partNumber}_${Date.now()}`;
-  res.json({ success: true, data: { uploadId, partNumber: +partNumber, etag } });
+  const { uploadId } = req.params;
+  const partNumber = parseInt(req.params.partNumber, 10);
+  if (isNaN(partNumber) || partNumber <= 0) throw new AppError('Invalid part number', 400);
+
+  const upload = await MediaUpload.findOne({ uploadId, instructor: req.user._id });
+  if (!upload) throw new AppError('Upload session not found', 404);
+  if (upload.status !== 'pending') throw new AppError(`Cannot upload part to a ${upload.status} session`, 400);
+
+  if (!req.file) throw new AppError('No data received for this part', 400);
+
+  // Upload part as a raw resource to Cloudinary for temporary storage
+  const result = await cloudinaryService.uploadRaw(
+    req.file.buffer,
+    `lms/tmp/${uploadId}`,
+    `part_${partNumber}`
+  );
+
+  upload.parts.push({
+    partNumber,
+    etag: result.etag,
+    publicId: result.public_id,
+  });
+  await upload.save();
+
+  res.json({ success: true, data: { uploadId, partNumber, etag: result.etag } });
 });
 
 exports.completeVideoUpload = catchAsync(async (req, res) => {
   const { uploadId } = req.params;
-  const { parts } = req.body; // [{ partNumber, etag }]
-  if (!Array.isArray(parts)) throw new AppError('parts array is required', 400);
-  // In production: call S3 CompleteMultipartUpload, then queue transcoding
-  res.json({ success: true, message: 'Upload complete. Transcoding started.', data: { uploadId, videoId: `vid_${Date.now()}`, status: 'processing' } });
+  const upload = await MediaUpload.findOne({ uploadId, instructor: req.user._id });
+  if (!upload) throw new AppError('Upload session not found', 404);
+  if (upload.status !== 'pending') throw new AppError(`Cannot complete a ${upload.status} session`, 400);
+
+  if (!upload.parts || upload.parts.length === 0) {
+    throw new AppError('Cannot complete upload without any uploaded parts', 400);
+  }
+
+  // In production with S3:
+  // await s3.completeMultipartUpload({ ... }).promise();
+  
+  // With Cloudinary simulation: 
+  // In a real scenario, we'd use their chunked upload API directly or combine these.
+  // For this capstone, we mark as completed and the background worker (if any) would handle it.
+  upload.status = 'completed';
+  await upload.save();
+
+  res.json({ 
+    success: true, 
+    message: 'Upload complete. Video is being processed.', 
+    data: { uploadId, videoId: `vid_${uuidv4()}`, status: 'processing' } 
+  });
 });
 
 exports.abortVideoUpload = catchAsync(async (req, res) => {
   const { uploadId } = req.params;
-  // In production: call S3 AbortMultipartUpload
-  res.json({ success: true, message: 'Upload aborted and temporary files cleaned up', data: { uploadId } });
+  const upload = await MediaUpload.findOne({ uploadId, instructor: req.user._id });
+  if (!upload) throw new AppError('Upload session not found', 404);
+
+  if (upload.status !== 'pending') {
+    throw new AppError(`Cannot abort an upload in ${upload.status} state`, 400);
+  }
+
+  // 1. Clean up temporary chunks from Cloudinary
+  if (upload.parts && upload.parts.length > 0) {
+    const deletePromises = upload.parts.map(part => 
+      cloudinaryService.deleteFile(part.publicId, 'raw')
+    );
+    await Promise.all(deletePromises);
+  }
+
+  // 2. Mark as aborted
+  upload.status = 'aborted';
+  await upload.save();
+
+  res.json({ 
+    success: true, 
+    message: 'Upload aborted and temporary chunks were successfully purged from storage', 
+    data: { uploadId } 
+  });
 });
 
 exports.getStreamingUrl = catchAsync(async (req, res) => {

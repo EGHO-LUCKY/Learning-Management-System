@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/questions/:questionId/answers/:answerId/upvote"
+method: POST
+pathVariables:
+  questionId: "{{questionId}}"
+  answerId: "{{answerId}}"
+order: 8000

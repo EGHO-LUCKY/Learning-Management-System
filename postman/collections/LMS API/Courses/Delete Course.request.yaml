@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/courses/my-courses/:courseId"
+method: DELETE
+pathVariables:
+  courseId: "{{courseId}}"
+order: 8000

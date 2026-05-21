@@ -7,7 +7,7 @@ const createLimiter = (max, windowMin = 1, message) =>
     standardHeaders: true,
     legacyHeaders: false,
     message: { success: false, message: message || `Too many requests. Limit: ${max} per ${windowMin}min.` },
-    skip: (req) => process.env.NODE_ENV === 'test',
+    skip: (_req) => process.env.NODE_ENV === 'test',
   });
 
 const authLimiter = createLimiter(

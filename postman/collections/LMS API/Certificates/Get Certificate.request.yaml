@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/certificates/:certificateId"
+method: GET
+pathVariables:
+  certificateId: "{{certificateId}}"
+order: 4000

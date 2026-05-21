@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/media/video/:videoId/captions"
+method: POST
+pathVariables:
+  videoId: "{{videoId}}"
+body:
+  type: formdata
+  content:
+    - type: file
+      key: captions
+      src: ""
+order: 8000

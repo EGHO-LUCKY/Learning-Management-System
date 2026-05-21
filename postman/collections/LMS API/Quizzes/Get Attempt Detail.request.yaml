@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/quizzes/:quizId/attempts/:attemptId"
+method: GET
+pathVariables:
+  quizId: "{{quizId}}"
+  attemptId: "{{attemptId}}"
+order: 8000

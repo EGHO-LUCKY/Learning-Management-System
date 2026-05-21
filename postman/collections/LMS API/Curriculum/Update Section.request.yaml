@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/instructor/courses/:courseId/sections/:sectionId"
+method: PUT
+headers:
+  Content-Type: application/json
+pathVariables:
+  courseId: "{{courseId}}"
+  sectionId: "{{sectionId}}"
+body:
+  type: json
+  content: "{}"
+order: 3000

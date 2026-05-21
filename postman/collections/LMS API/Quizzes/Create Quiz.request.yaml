@@ -1,0 +1,11 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/instructor/lectures/:lectureId/quiz"
+method: POST
+headers:
+  Content-Type: application/json
+pathVariables:
+  lectureId: "{{lectureId}}"
+body:
+  type: json
+  content: "{}"
+order: 1000

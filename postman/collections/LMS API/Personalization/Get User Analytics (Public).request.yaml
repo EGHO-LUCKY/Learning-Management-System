@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/personalization/analytics/:userId"
+method: GET
+pathVariables:
+  userId: "{{userId}}"
+order: 13000

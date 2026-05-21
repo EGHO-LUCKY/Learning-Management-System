@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/admin/coupons/:couponId"
+method: DELETE
+pathVariables:
+  couponId: "{{couponId}}"
+order: 10200

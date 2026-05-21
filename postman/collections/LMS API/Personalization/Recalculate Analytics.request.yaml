@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/personalization/analytics/recalculate"
+method: POST
+order: 7000

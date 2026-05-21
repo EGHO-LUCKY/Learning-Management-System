@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/gamification/achievements/:achievementId"
+method: GET
+pathVariables:
+  achievementId: "{{achievementId}}"
+order: 3000

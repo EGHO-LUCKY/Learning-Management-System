@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/courses/:courseId/reviews/:reviewId"
+method: PUT
+headers:
+  Content-Type: application/json
+pathVariables:
+  courseId: "{{courseId}}"
+  reviewId: "{{reviewId}}"
+body:
+  type: json
+  content: "{}"
+order: 3000

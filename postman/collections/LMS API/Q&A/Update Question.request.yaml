@@ -1,0 +1,11 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/questions/:questionId"
+method: PUT
+headers:
+  Content-Type: application/json
+pathVariables:
+  questionId: "{{questionId}}"
+body:
+  type: json
+  content: "{}"
+order: 3000

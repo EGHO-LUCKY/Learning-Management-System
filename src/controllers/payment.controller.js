@@ -1,6 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Course = require('../models/Course.model');
-const { Order, Coupon, Enrollment, Payout } = require('../models/index');
+const { Order, Coupon, Enrollment, Payout, Transaction } = require('../models/index');
 const { AppError } = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 const notificationService = require('../services/notification.service');
@@ -58,6 +58,17 @@ exports.createCheckout = catchAsync(async (req, res) => {
 
     await Enrollment.create({ student: req.user._id, course: courseId, order: order._id });
     if (appliedCoupon) await Coupon.findByIdAndUpdate(appliedCoupon._id, { $inc: { usedCount: 1 } });
+
+    // Create transaction for instructor (even if 0)
+    await Transaction.create({
+      user: course.instructor._id,
+      type: 'sale',
+      amount: 0,
+      currency: course.currency || 'USD',
+      description: `Free enrollment: ${course.title}`,
+      order: order._id,
+      course: course._id,
+    });
 
     return res.json({ success: true, message: 'Enrolled for free!', data: { order, enrolled: true } });
   }
@@ -119,7 +130,7 @@ exports.stripeWebhook = catchAsync(async (req, res) => {
   switch (event.type) {
     case 'checkout.session.completed': {
       const session = event.data.object;
-      const { userId, courseId, couponId, discount } = session.metadata;
+      const { userId, courseId, couponId } = session.metadata;
 
       const order = await Order.findOneAndUpdate(
         { stripeSessionId: session.id },
@@ -134,6 +145,17 @@ exports.stripeWebhook = catchAsync(async (req, res) => {
 
         const user = await require('../models/User.model').findById(userId);
         const course = await Course.findById(courseId).populate('instructor');
+
+        // Create transaction for instructor
+        await Transaction.create({
+          user: course.instructor._id,
+          type: 'sale',
+          amount: order.courses[0]?.instructorShare || 0,
+          currency: order.currency,
+          description: `Sale of course: ${course.title}`,
+          order: order._id,
+          course: course._id,
+        });
 
         await notificationService.send({
           userId,
@@ -160,6 +182,38 @@ exports.stripeWebhook = catchAsync(async (req, res) => {
   }
 
   res.json({ received: true });
+});
+
+// ─── Get Checkout Session Status ──────────────────────────────────────────────
+exports.getCheckoutSession = catchAsync(async (req, res) => {
+  const { sessionId } = req.params;
+  if (!sessionId || !sessionId.startsWith('cs_')) {
+    throw new AppError('Invalid session ID', 400);
+  }
+
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    res.json({
+      success: true,
+      data: {
+        status: session.payment_status,
+        sessionId: session.id,
+        customerEmail: session.customer_email,
+      },
+    });
+  } catch (error) {
+    throw new AppError('Checkout session not found', 404);
+  }
+});
+
+// ─── Get Single Order ─────────────────────────────────────────────────────────
+exports.getOrderById = catchAsync(async (req, res) => {
+  const order = await Order.findOne({ _id: req.params.orderId, student: req.user._id })
+    .populate('courses.course', 'title thumbnail slug');
+
+  if (!order) throw new AppError('Order not found', 404);
+
+  res.json({ success: true, data: order });
 });
 
 // ─── Order History ────────────────────────────────────────────────────────────
@@ -228,23 +282,38 @@ exports.validateCoupon = catchAsync(async (req, res) => {
   });
 });
 
+// ─── Admin: Manage Coupons ───────────────────────────────────────────────────
+exports.updateCoupon = catchAsync(async (req, res) => {
+  const coupon = await Coupon.findByIdAndUpdate(req.params.couponId, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  if (!coupon) throw new AppError('Coupon not found', 404);
+  res.json({ success: true, data: coupon });
+});
+
+exports.deleteCoupon = catchAsync(async (req, res) => {
+  const coupon = await Coupon.findByIdAndDelete(req.params.couponId);
+  if (!coupon) throw new AppError('Coupon not found', 404);
+  res.json({ success: true, message: 'Coupon deleted' });
+});
+
 // ─── Instructor: Earnings Summary ─────────────────────────────────────────────
 exports.getEarnings = catchAsync(async (req, res) => {
-  const orders = await Order.find({
-    'courses.course': { $in: await Course.find({ instructor: req.user._id }).select('_id') },
-    status: 'completed',
-  });
+  const [sales, payouts] = await Promise.all([
+    Transaction.find({ user: req.user._id, type: 'sale', status: 'completed' }),
+    Transaction.find({ user: req.user._id, type: 'payout', status: 'completed' }),
+  ]);
 
-  const total = orders.reduce((sum, o) => sum + (o.courses[0]?.instructorShare || 0), 0);
-  const payouts = await Payout.find({ instructor: req.user._id });
-  const paid = payouts.filter(p => p.status === 'paid').reduce((sum, p) => sum + p.amount, 0);
+  const totalEarnings = sales.reduce((sum, t) => sum + t.amount, 0);
+  const totalPaid = Math.abs(payouts.reduce((sum, t) => sum + t.amount, 0));
 
   res.json({
     success: true,
     data: {
-      total: Math.round(total * 100) / 100,
-      paid: Math.round(paid * 100) / 100,
-      pending: Math.round((total - paid) * 100) / 100,
+      total: Math.round(totalEarnings * 100) / 100,
+      paid: Math.round(totalPaid * 100) / 100,
+      pending: Math.round((totalEarnings - totalPaid) * 100) / 100,
       currency: 'USD',
     },
   });
@@ -260,6 +329,17 @@ exports.requestPayout = catchAsync(async (req, res) => {
     amount,
     method,
     status: 'pending',
+  });
+
+  // Create transaction entry for payout
+  await Transaction.create({
+    user: req.user._id,
+    type: 'payout',
+    amount: -amount, // Payouts are negative in the ledger
+    currency: 'USD',
+    status: 'pending',
+    description: `Payout request via ${method}`,
+    payout: payout._id,
   });
 
   res.status(201).json({ success: true, message: 'Payout request submitted', data: payout });

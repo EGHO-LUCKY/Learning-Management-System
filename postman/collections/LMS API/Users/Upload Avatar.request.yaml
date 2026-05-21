@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/users/me/avatar"
+method: POST
+body:
+  type: formdata
+  content:
+    - type: file
+      key: avatar
+      src: ""
+order: 5000
