@@ -8,6 +8,7 @@
 8. Kolawole Samuel BABATUNDE  "https://github.com/CompetitiveBit8"
 9. Abdulkadir Abdulgafar Shina   "https://github.com/Gafty999"
 10. Agbochenu Rapheal     "https://github.com/agbochenurapheal-hue"
+11. Egho Lucky "https://github.com/EGHO-LUCKY/Learning-Management-System"
 
 
 
